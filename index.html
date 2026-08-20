@@ -173,7 +173,7 @@
   .about-copy p{color:var(--muted); font-size:1.02rem; margin-bottom:22px; max-width:520px;}
   .about-copy p strong{color:var(--paper); font-weight:600;}
   .tag-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;}
-  .tag-pill{font-family:'IBM Plex Mono',monospace; font-size:0.74rem; padding:8px 14px; border:1px solid var(--line); color:var(--muted); letter-spacing:0.03em;}
+  .tag-pill{font-family:'IBM Plex Mono',monospace; font-size:0.74rem; padding:8px 14px; border:1px solid var(--line); color:var(--muted); letter-spacing:0.03em; white-space:nowrap;}
 
   @media (max-width:860px){ .about-grid{grid-template-columns:1fr; gap:40px;} .about-visual{max-width:280px;} }
 
@@ -326,8 +326,6 @@
       <h2>Recent edits</h2>
       <p>Placeholder projects for now — send over your real videos and I'll drop them in here in place of these tiles.</p>
     </div>
-    <!-- WORK GRID: each .work-card below is a placeholder tile. To swap in a real project, replace
-         the .thumb div's background (or swap it for an <img>/<video>) and update the title + category text. -->
     <div class="work-grid">
       <div class="work-card"><div class="thumb g1"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Brand Film — Northline Co.</h4><span>Corporate</span></div></div>
       <div class="work-card"><div class="thumb g2"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Product Launch Reel</h4><span>Commercial</span></div></div>
@@ -349,11 +347,12 @@
         <div class="eyebrow">04:03 · About</div>
         <h2 style="margin-bottom:20px;">Hi, I'm the editor behind SequencedFx.</h2>
         <p><strong>I'm a motion graphics artist and video editor with 3 years of experience</strong> helping brands, businesses, and creators turn raw footage into polished, compelling stories.</p>
-        <p>From animated titles to corporate videos to social content, I bring a sharp eye for pacing, color, and motion to every project — combined with clear communication and reliable turnaround times. Add your own story here: what got you into editing, your specialties, and what clients can expect working with you.</p>
+        <p>From animated titles to corporate videos to social content, I bring a sharp eye for pacing, color, and motion to every project — combined with clear communication and reliable turnaround times.</p>
         <div class="tag-row">
           <span class="tag-pill">After Effects</span>
           <span class="tag-pill">Premiere Pro</span>
           <span class="tag-pill">DaVinci Resolve</span>
+          <span class="tag-pill">CapCut</span>
         </div>
       </div>
     </div>
@@ -398,6 +397,7 @@
         <p>Tell me about your project and I'll get back to you within one business day.</p>
         <div class="info-line"><span class="k">Email</span><a class="v" href="mailto:sequencedfx@gmail.com">sequencedfx@gmail.com</a></div>
         <div class="info-line"><span class="k">Social</span><a class="v" href="https://www.instagram.com/sequencedfx?igsi=MTNyYnM0NmZzM3MzOQ==" target="_blank" rel="noopener noreferrer">Instagram</a></div>
+        <div class="info-line"><span class="k">Asset Delivery</span><span class="v">Dropbox / Google Drive / Mega</span></div>
       </div>
       <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="028f43bc-269d-415a-80a2-5779df8787e2">
@@ -414,7 +414,18 @@
             <option>Other</option>
           </select>
         </div>
-        <div class="field"><label for="message">Message (optional)</label><textarea id="message" name="Message"></textarea></div>
+        <div class="field"><label for="budget">Budget Range</label>
+          <select id="budget" name="Budget" required>
+            <option value="" disabled selected>Select your budget range…</option>
+            <option value="Under $500">Under $500</option>
+            <option value="$500 - $1,000">$500 - $1,000</option>
+            <option value="$1,000 - $2,500">$1,000 - $2,500</option>
+            <option value="$2,500 - $5,000">$2,500 - $5,000</option>
+            <option value="$5,000+">$5,000+</option>
+          </select>
+        </div>
+        <div class="field"><label for="dropoff">Asset Drop-off Link / Folder Box (Dropbox, Drive, Mega, etc.)</label><input id="dropoff" name="Footage Dropoff Link" type="url" placeholder="https://dropbox.com/... or https://drive.google.com/..."></div>
+        <div class="field"><label for="message">Project Details / Message (optional)</label><textarea id="message" name="Message" placeholder="Tell us about your timeline, video duration, or specific style notes..."></textarea></div>
         <button type="submit" class="btn btn-primary cut">Send Message</button>
         <div id="form-error">Something went wrong sending that — please try again, or email <a href="mailto:sequencedfx@gmail.com" style="text-decoration:underline;">sequencedfx@gmail.com</a> directly.</div>
       </form>
@@ -473,9 +484,7 @@
     wf.appendChild(bar);
   }
 
-  // contact form — submits to Web3Forms, which emails the submission to sequencedfx@gmail.com.
-  // The form's action/method attributes are a no-JS fallback; when JS runs, fetch() below
-  // intercepts submission so the page doesn't have to navigate away.
+  // contact form submit
   const form = document.getElementById('contactForm');
   const success = document.getElementById('form-success');
   const errorBox = document.getElementById('form-error');

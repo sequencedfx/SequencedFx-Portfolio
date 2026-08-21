@@ -170,7 +170,8 @@
   .about-copy p{color:var(--muted); font-size:1.02rem; margin-bottom:22px; max-width:520px;}
   .about-copy p strong{color:var(--paper); font-weight:600;}
   .tag-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;}
-  .tag-pill{font-family:'IBM Plex Mono',monospace; font-size:0.74rem; padding:8px 14px; border:1px solid var(--line); color:var(--muted); letter-spacing:0.03em; white-space:nowrap;}
+  .tag-pill{font-family:'IBM Plex Mono',monospace; font-size:0.74rem; padding:8px 14px; border:1px solid var(--line); color:var(--muted); letter-spacing:0.03em; white-space:nowrap; transition:background .2s, color .2s, border-color .2s;}
+  a.tag-pill:hover{background:var(--signal); color:var(--ink); border-color:var(--signal);}
 
   @media (max-width:860px){ .about-grid{grid-template-columns:1fr; gap:40px;} .about-visual{max-width:280px;} }
 
@@ -197,7 +198,7 @@
   /* Contact & Form */
   .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px;}
   .contact-info p{color:var(--muted); margin-bottom:32px; max-width:400px;}
-  .info-line{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:20px;}
+  .info-line{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:20px;}
   .info-line:last-child{border-bottom:1px solid var(--line);}
   .info-line .k{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
   .info-line .v{font-size:0.95rem;}
@@ -213,7 +214,7 @@
   .conditional-field{display:none;}
 
   /* TOS Box & Checkbox */
-  .tos-box{border:1px solid var(--line); padding:16px; background:var(--panel-2); font-size:0.85rem; color:var(--muted); line-height:1.5; max-height:130px; overflow-y:auto; margin-bottom:16px;}
+  .tos-box{border:1px solid var(--line); padding:16px; background:var(--panel-2); font-size:0.85rem; color:var(--muted); line-height:1.5; max-height:140px; overflow-y:auto; margin-bottom:16px;}
   .tos-box strong{color:var(--paper);}
   .tos-box ul{padding-left:18px; margin-top:6px;}
   .checkbox-group{display:flex; align-items:center; gap:10px; margin-bottom:24px;}
@@ -225,7 +226,7 @@
 
   #form-success{display:none; grid-column:1/-1; margin-top:8px; padding:36px 28px; background:var(--signal); color:var(--ink); text-align:center;}
   #form-success svg{width:44px; height:44px; stroke:var(--ink); fill:none; stroke-width:3; margin:0 auto 16px;}
-  #form-success p{font-size:1rem; font-weight:600; max-width:360px; margin:0 auto;}
+  #form-success p{font-size:1rem; font-weight:600; max-width:380px; margin:0 auto;}
   #form-error{display:none; margin-top:18px; padding:14px 16px; background:rgba(0,0,0,0.04); border:1px solid var(--signal-dim); font-size:0.9rem;}
 
   @media (max-width:860px){ .contact-grid{grid-template-columns:1fr; gap:44px;} }
@@ -406,9 +407,16 @@
         <h2 style="margin-bottom:18px;">Let's cut something great.</h2>
         <p>Tell me about your project and I'll get back to you within one business day.</p>
         <div class="info-line"><span class="k">Email</span><a class="v" href="mailto:sequencedfx@gmail.com">sequencedfx@gmail.com</a></div>
-        <div class="info-line"><span class="k">Instagram</span><a class="v" href="https://www.instagram.com/sequencedfx?igsi=MTNyYnM0NmZzM3MzOQ==" target="_blank" rel="noopener noreferrer">@sequencedfx</a></div>
-        <div class="info-line"><span class="k">TikTok</span><a class="v" href="https://www.tiktok.com/@sequencedfx?_r=1&amp;_t=ZP-994JF73KYAw" target="_blank" rel="noopener noreferrer">@sequencedfx</a></div>
-        <div class="info-line"><span class="k">YouTube</span><a class="v" href="https://youtube.com/@sequencedfx?si=CdBzRb9t8jd4JoqJ" target="_blank" rel="noopener noreferrer">@sequencedfx</a></div>
+        
+        <div class="info-line">
+          <span class="k">Socials</span>
+          <div class="tag-row" style="margin-top:0;">
+            <a href="https://youtube.com/@sequencedfx?si=CdBzRb9t8jd4JoqJ" target="_blank" rel="noopener noreferrer" class="tag-pill">YouTube</a>
+            <a href="https://www.instagram.com/sequencedfx?igsi=MTNyYnM0NmZzM3MzOQ==" target="_blank" rel="noopener noreferrer" class="tag-pill">Instagram</a>
+            <a href="https://www.tiktok.com/@sequencedfx?_r=1&amp;_t=ZP-994JF73KYAw" target="_blank" rel="noopener noreferrer" class="tag-pill">TikTok</a>
+          </div>
+        </div>
+
         <div class="info-line"><span class="k">Asset Delivery</span><span class="v">Dropbox / Google Drive / Mega</span></div>
       </div>
 
@@ -458,7 +466,6 @@
             <option value="Credit / Debit Card">Credit / Debit Card</option>
             <option value="PayPal">PayPal</option>
             <option value="Cash App">Cash App</option>
-            <option value="Cryptocurrency">Cryptocurrency</option>
           </select>
         </div>
 
@@ -469,6 +476,7 @@
           <div class="tos-box">
             <strong>Important Client Guidelines:</strong>
             <ul>
+              <li><strong>Payment Schedule:</strong> 50% payment upfront required before work starts, and 50% upon final video completion.</li>
               <li><strong>Revisions:</strong> Up to 2 free revisions per project. Additional revisions incur extra fees.</li>
               <li><strong>Budget &amp; Scope:</strong> Allocated budget directly affects turnaround time and motion graphics complexity.</li>
               <li><strong>Refund Policy:</strong> Full refunds cannot be issued once work begins due to non-refundable payment transfer fees.</li>
@@ -488,7 +496,7 @@
 
       <div id="form-success" class="cut">
         <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><path d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-        <p>Thanks — I've got your request and will follow up shortly.</p>
+        <p>Details confirmed! Please keep an eye on your email for updates and notifications.</p>
       </div>
     </div>
   </div>
@@ -583,3 +591,4 @@
 
 </body>
 </html>
+       

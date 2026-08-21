@@ -1,519 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SequencedFx — Motion Graphics &amp; Post-Production</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#FFFFFF;
-    --panel:#F4F4F3;
-    --panel-2:#EBEBE9;
-    --paper:#111111;
-    --muted:#666666;
-    --signal:#000000;
-    --signal-dim:#2E2E2E;
-    --steel:#AFAFAF;
-    --line:rgba(0,0,0,0.14);
-    --cut:16px;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;} }
-  body{
-    background:var(--ink);
-    color:var(--paper);
-    font-family:'Inter',sans-serif;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  a{color:inherit;text-decoration:none;}
-  ul{list-style:none;}
-  img{max-width:100%;display:block;}
-  button,input,textarea,select{font-family:inherit;}
-  :focus-visible{outline:2px solid var(--signal); outline-offset:3px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start a Project - SequencedFX</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #111111;
+      --muted-color: #666666;
+      --border-color: #e5e5e5;
+      --accent-color: #000000;
+      --font-mono: 'Courier New', Courier, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-  h1,h2,h3,h4{font-family:'Archivo',sans-serif; font-weight:800; line-height:1.08; letter-spacing:-0.02em;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
-  .eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.78rem;
-    letter-spacing:0.14em;
-    color:var(--signal);
-    text-transform:uppercase;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:18px;
-  }
-  .eyebrow::before{content:"";width:22px;height:1px;background:var(--signal);display:inline-block;}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  .container{max-width:1180px; margin:0 auto; padding:0 24px;}
-  section{padding:130px 0;}
-  .section-head{max-width:640px; margin-bottom:64px;}
-  .section-head h2{font-size:clamp(1.9rem,3.6vw,2.7rem); margin-bottom:16px;}
-  .section-head p{color:var(--muted); font-size:1.05rem; max-width:520px;}
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-sans);
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
 
-  .cut{ clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%); }
-  .cut-sm{ clip-path: polygon(0 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%); }
+    .container {
+      width: 100%;
+      max-width: 600px;
+    }
 
-  /* ===== Scrubber (fixed scroll-progress timeline) ===== */
-  .scrubber{position:fixed; top:0; left:0; right:0; height:4px; background:rgba(0,0,0,0.08); z-index:1200;}
-  .scrubber-fill{height:100%; width:0%; background:var(--signal); position:relative; transition:width 0.05s linear;}
-  .scrubber-fill::after{content:""; position:absolute; right:-5px; top:-4px; width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid var(--signal);}
-  .scrubber-ticks{position:absolute; inset:0; display:flex; justify-content:space-between; padding:0 2px;}
-  .scrubber-ticks span{width:1px; height:100%; background:rgba(0,0,0,0.16);}
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
 
-  /* ===== Nav ===== */
-  header{position:fixed; top:4px; left:0; right:0; z-index:1100; padding:22px 0; transition:background .3s ease, padding .3s ease, border-color .3s ease;}
-  header.scrolled{background:rgba(255,255,255,0.88); backdrop-filter:blur(10px); padding:14px 0; border-bottom:1px solid var(--line);}
-  nav{display:flex; align-items:center; justify-content:space-between;}
-  .brand{font-family:'Archivo',sans-serif; font-weight:900; font-size:1.2rem; letter-spacing:-0.01em; display:flex; align-items:baseline; gap:8px;}
-  .brand .tag{font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:0.68rem; color:var(--signal); letter-spacing:0.1em;}
-  .nav-links{display:flex; align-items:center; gap:36px;}
-  .nav-links a{font-size:0.92rem; color:var(--muted); transition:color .2s;}
-  .nav-links a:hover{color:var(--paper);}
-  .nav-cta{font-family:'IBM Plex Mono',monospace; font-size:0.8rem; letter-spacing:0.04em; padding:11px 20px; background:var(--signal); color:var(--ink); font-weight:600;}
-  .menu-toggle{display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:8px;}
-  .menu-toggle span{width:22px; height:2px; background:var(--paper);}
+    .form-group {
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+    }
 
-  @media (max-width:860px){
-    .nav-links{position:fixed; top:0; left:0; right:0; bottom:0; background:var(--ink); flex-direction:column; justify-content:center; align-items:center; gap:32px; display:none; z-index:1150;}
-    .nav-links.open{display:flex;}
-    .nav-links a{font-size:1.3rem; color:var(--paper);}
-    .menu-toggle{display:flex; z-index:1200;}
-    a.nav-cta{display:none;}
-    .nav-links .nav-cta-mobile{display:inline-block; font-family:'IBM Plex Mono',monospace; padding:12px 24px; background:var(--signal); color:var(--ink); font-size:0.85rem;}
-  }
+    .label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted-color);
+      margin-bottom: 8px;
+    }
 
-  /* ===== Hero ===== */
-  #hero{padding:0; position:relative;}
-  .letterbox{height:34px; background:#000000; position:relative;}
-  .letterbox::after{content:""; position:absolute; inset:0; background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 64px);}
-  .hero-inner{padding:120px 0 90px;}
-  .hero-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:0.8rem; color:var(--muted); letter-spacing:0.1em; margin-bottom:28px; display:flex; align-items:center; gap:12px;}
-  .hero-eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--signal); animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.35;}}
-  .hero-inner h1{font-size:clamp(2.6rem,6.2vw,5rem); max-width:820px; margin-bottom:26px;}
-  .hero-inner h1 em{font-style:normal; background:var(--signal); color:var(--ink); padding:2px 16px 6px; display:inline-block;}
-  .hero-inner .lede{font-size:1.15rem; color:var(--muted); max-width:520px; margin-bottom:44px;}
-  .btn-row{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:90px;}
-  .btn{font-family:'Inter',sans-serif; font-weight:600; font-size:0.95rem; padding:16px 30px; display:inline-block; transition:transform .2s ease, background .2s ease;}
-  .btn-primary{background:var(--signal); color:var(--ink);}
-  .btn-primary:hover{background:#2A2A2A; transform:translateY(-2px);}
-  .btn-ghost{border:1px solid var(--line); color:var(--paper);}
-  .btn-ghost:hover{background:var(--signal); border-color:var(--signal); color:var(--ink); transform:translateY(-2px);}
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 0;
+      border: none;
+      border-bottom: 1px solid var(--border-color);
+      background: transparent;
+      font-size: 0.95rem;
+      color: var(--text-color);
+      outline: none;
+      transition: border-color 0.2s ease;
+      font-family: inherit;
+    }
 
-  /* timeline strip / stats */
-  .timeline-strip{position:relative; padding-top:26px;}
-  .timeline-track{position:absolute; top:0; left:0; right:0; height:1px; background:var(--line);}
-  .playhead{position:absolute; top:-5px; left:0%; width:11px; height:11px; background:var(--signal); clip-path:polygon(50% 100%, 0 0, 100% 0); animation:scrub 7s ease-in-out infinite;}
-  @keyframes scrub{0%,100%{left:2%;} 50%{left:96%;}}
-  .clip-row{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
-  .clip-block{background:var(--panel); padding:22px 20px; border-top:2px solid var(--signal-dim); transition:transform .25s ease, box-shadow .25s ease;}
-  .clip-block:hover{transform:translateY(-4px); box-shadow:0 10px 24px rgba(0,0,0,0.10);}
-  .clip-block:nth-child(2){border-top-color:var(--steel);}
-  .clip-block .num{font-family:'Archivo',sans-serif; font-weight:900; font-size:1.9rem; margin-bottom:4px;}
-  .clip-block .lbl{font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase;}
-  .waveform{display:flex; align-items:flex-end; gap:3px; height:22px; margin-top:36px;}
-  .waveform span{flex:1; background:var(--muted); min-width:2px; transform-origin:bottom; opacity:0.5; animation:wavePulse 1.6s ease-in-out infinite;}
-  @keyframes wavePulse{0%,100%{transform:scaleY(0.55); opacity:0.35;} 50%{transform:scaleY(1); opacity:0.75;}}
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+      border-bottom-color: var(--accent-color);
+    }
 
-  @media (max-width:760px){
-    .clip-row{grid-template-columns:repeat(2,1fr);}
-    .playhead{display:none;}
-  }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
 
-  /* ===== Services ===== */
-  #services{background:var(--panel);}
-  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  .svc-card{background:var(--panel-2); padding:32px 26px; transition:transform .25s ease;}
-  .svc-card:hover{transform:translateY(-4px);}
-  .svc-icon{width:46px; height:46px; background:var(--signal); display:flex; align-items:center; justify-content:center; margin-bottom:22px;}
-  .svc-icon svg{width:22px; height:22px; stroke:#FFFFFF; fill:none; stroke-width:1.5;}
-  .svc-card h3{font-size:1.15rem; margin-bottom:10px; letter-spacing:-0.01em;}
-  .svc-card p{color:var(--muted); font-size:0.92rem; line-height:1.65;}
+    .conditional-field {
+      display: none;
+    }
 
-  @media (max-width:940px){ .grid-3{grid-template-columns:repeat(2,1fr);} }
-  @media (max-width:600px){ .grid-3{grid-template-columns:1fr;} }
+    /* Social Links Section */
+    .social-links {
+      margin: 20px 0 30px;
+      display: flex;
+      gap: 16px;
+    }
 
-  /* ===== Work ===== */
-  .work-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  .work-card{position:relative; aspect-ratio:4/3; overflow:hidden; cursor:pointer;}
-  .work-card .thumb{position:absolute; inset:0; transition:transform .4s ease;}
-  .work-card:hover .thumb{transform:scale(1.06);}
-  .g1{background:linear-gradient(135deg,#2e2e2e,#0a0a0a);}
-  .g2{background:linear-gradient(160deg,#242424,#050505);}
-  .g3{background:linear-gradient(110deg,#333333,#0d0d0d);}
-  .g4{background:linear-gradient(200deg,#282828,#080808);}
-  .g5{background:linear-gradient(45deg,#262626,#0a0a0a);}
-  .g6{background:linear-gradient(170deg,#2a2a2a,#060606);}
-  .work-card .mark{position:absolute; width:20px; height:20px; border-color:#FFFFFF; opacity:0.85;}
-  .mark-tl{top:14px; left:14px; border-top:2px solid; border-left:2px solid;}
-  .mark-br{bottom:14px; right:14px; border-bottom:2px solid; border-right:2px solid;}
-  .play-mark{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:52px; height:52px; border:1px solid rgba(255,255,255,0.5); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:border-color .25s ease, background .25s ease;}
-  .work-card:hover .play-mark{border-color:#FFFFFF; background:rgba(255,255,255,0.12);}
-  .play-mark svg{width:14px; height:14px; fill:#FFFFFF; margin-left:2px;}
-  .work-info{position:absolute; left:0; right:0; bottom:0; padding:18px; background:linear-gradient(to top, rgba(10,10,10,0.92), transparent);}
-  .work-info h4{font-family:'Inter',sans-serif; font-weight:600; font-size:1rem; margin-bottom:3px; color:#FFFFFF;}
-  .work-info span{font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:#FFFFFF; letter-spacing:0.06em; text-transform:uppercase;}
+    .social-links a {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-color);
+      text-decoration: none;
+      border-bottom: 1px solid var(--text-color);
+      padding-bottom: 2px;
+      text-transform: uppercase;
+    }
 
-  @media (max-width:940px){ .work-grid{grid-template-columns:repeat(2,1fr);} }
-  @media (max-width:600px){ .work-grid{grid-template-columns:1fr;} }
+    /* Terms & Conditions Section */
+    .tos-box {
+      border: 1px solid var(--border-color);
+      padding: 16px;
+      background-color: #fafafa;
+      font-size: 0.85rem;
+      color: #444;
+      line-height: 1.5;
+      max-height: 140px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+    }
 
-  /* ===== About ===== */
-  #about{background:var(--panel);}
-  .about-grid{display:grid; grid-template-columns:0.8fr 1.2fr; gap:64px; align-items:center;}
-  .about-visual{aspect-ratio:1; background:linear-gradient(135deg, #3A3A3A 0%, #1A1A1A 55%, #000000 100%); display:flex; align-items:center; justify-content:center; position:relative;}
-  .about-visual svg{width:64px; height:64px; stroke:#FFFFFF; fill:none; stroke-width:1.2; opacity:0.9;}
-  .about-copy p{color:var(--muted); font-size:1.02rem; margin-bottom:22px; max-width:520px;}
-  .about-copy p strong{color:var(--paper); font-weight:600;}
-  .tag-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;}
-  .tag-pill{font-family:'IBM Plex Mono',monospace; font-size:0.74rem; padding:8px 14px; border:1px solid var(--line); color:var(--muted); letter-spacing:0.03em; white-space:nowrap;}
+    .tos-box ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
 
-  @media (max-width:860px){ .about-grid{grid-template-columns:1fr; gap:40px;} .about-visual{max-width:280px;} }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
 
-  /* ===== Process ===== */
-  .process-list{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
-  .process-step{border-top:1px solid var(--line); padding-top:22px;}
-  .process-step .step-num{font-family:'IBM Plex Mono',monospace; color:var(--signal); font-size:0.85rem; margin-bottom:14px; display:block;}
-  .process-step h4{font-size:1.05rem; margin-bottom:10px;}
-  .process-step p{color:var(--muted); font-size:0.9rem; line-height:1.6;}
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
 
-  @media (max-width:860px){ .process-list{grid-template-columns:repeat(2,1fr);} }
-  @media (max-width:520px){ .process-list{grid-template-columns:1fr;} }
+    .checkbox-group label {
+      font-size: 0.85rem;
+      color: var(--text-color);
+      cursor: pointer;
+    }
 
-  /* ===== Testimonials ===== */
-  #testimonials{background:var(--panel);}
-  .testi-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  .testi-card{background:var(--panel-2); padding:30px 26px;}
-  .testi-card .qmark{font-family:'Archivo',sans-serif; font-size:2.2rem; color:var(--steel); font-weight:900; line-height:1; margin-bottom:10px; display:block;}
-  .testi-card p{color:var(--paper); font-size:0.95rem; line-height:1.65; margin-bottom:20px;}
-  .testi-who{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--muted);}
+    /* Primary Button */
+    .submit-btn {
+      width: 100%;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border: none;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
 
-  @media (max-width:940px){ .testi-grid{grid-template-columns:1fr;} }
-
-  /* ===== Contact ===== */
-  .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px;}
-  .contact-info p{color:var(--muted); margin-bottom:32px; max-width:400px;}
-  .info-line{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:20px;}
-  .info-line:last-child{border-bottom:1px solid var(--line);}
-  .info-line .k{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
-  .info-line .v{font-size:0.95rem;}
-  .info-line a:hover{color:var(--signal);}
-
-  .field{margin-bottom:20px;}
-  .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:9px;}
-  .field input, .field select, .field textarea{width:100%; background:transparent; border:none; border-bottom:1px solid var(--line); color:var(--paper); padding:11px 2px; font-size:0.98rem; transition:border-color .2s;}
-  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--signal); outline:none;}
-  .field textarea{resize:vertical; min-height:90px;}
-  .field select option{background:var(--ink);}
-  
-  /* Payment / Deposit Button Styling */
-  .pay-btn-container{margin-top:20px;}
-  .btn-pay{display:inline-block; background:#000000; color:#FFFFFF; padding:12px 24px; font-family:'IBM Plex Mono',monospace; font-size:0.85rem; font-weight:600; text-transform:uppercase; border:1px solid #000000; transition:all 0.2s ease;}
-  .btn-pay:hover{background:#2E2E2E; color:#FFFFFF; border-color:#2E2E2E;}
-
-  #form-success{display:none; grid-column:1/-1; margin-top:8px; padding:36px 28px; background:var(--signal); color:var(--ink); text-align:center;}
-  #form-success svg{width:44px; height:44px; stroke:var(--ink); fill:none; stroke-width:3; margin:0 auto 16px;}
-  #form-success p{font-size:1rem; font-weight:600; max-width:360px; margin:0 auto;}
-  #form-error{display:none; margin-top:18px; padding:14px 16px; background:rgba(0,0,0,0.04); border:1px solid var(--signal-dim); font-size:0.9rem;}
-
-  @media (max-width:860px){ .contact-grid{grid-template-columns:1fr; gap:44px;} }
-
-  /* ===== Footer ===== */
-  footer{border-top:1px solid var(--line); padding:44px 0;}
-  .footer-inner{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;}
-  .footer-inner .brand{font-size:1rem;}
-  .footer-links{display:flex; gap:26px;}
-  .footer-links a{font-size:0.85rem; color:var(--muted);}
-  .footer-links a:hover{color:var(--signal);}
-  .copyright{font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--muted); margin-top:20px;}
-
-</style>
+    .submit-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
 
-<div class="scrubber"><div class="scrubber-ticks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="scrubber-fill" id="scrubberFill"></div></div>
-
-<header id="siteHeader">
   <div class="container">
-    <nav>
-      <a href="#hero" class="brand">SequencedFx <span class="tag">/ MOTION &amp; POST</span></a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#services">Services</a></li>
-        <li><a href="#work">Work</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#process">Process</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#contact" class="nav-cta-mobile">Start a Project</a></li>
-      </ul>
-      <a href="#contact" class="btn nav-cta cut-sm">Start a Project</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-    </nav>
+    <h1 class="section-title">Let's cut something great.</h1>
+
+    <!-- Social Links -->
+    <div class="social-links">
+      <a href="https://www.tiktok.com/@sequencedfx?_r=1&_t=ZP-994JF73KYAw" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://youtube.com/@sequencedfx?si=CdBzRb9t8jd4JoqJ" target="_blank" rel="noopener">YouTube</a>
+    </div>
+
+    <form id="project-form">
+      <div class="form-group">
+        <label class="label" for="name">Name</label>
+        <input type="text" id="name" required placeholder="Your name">
+      </div>
+
+      <div class="form-group">
+        <label class="label" for="email">Email</label>
+        <input type="email" id="email" required placeholder="your.email@example.com">
+      </div>
+
+      <!-- Project Type Selection -->
+      <div class="form-group">
+        <label class="label" for="project-type">Project Type</label>
+        <select id="project-type" required onchange="handleProjectTypeChange(this.value)">
+          <option value="" disabled selected>Select project type...</option>
+          <option value="motion_graphics">Motion Graphics</option>
+          <option value="video_editing">Video Editing / Post Production</option>
+          <option value="full_package">Full Package Edit</option>
+          <option value="gaming">Gaming</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <!-- Dynamic Custom Budget Dropdown (Appears when 'Other' is selected) -->
+      <div class="form-group conditional-field" id="custom-budget-group">
+        <label class="label" for="custom-budget">Custom Budget / Price Range</label>
+        <input type="text" id="custom-budget" placeholder="e.g. $250 - $500 (Custom Offer)">
+      </div>
+
+      <!-- Reference Link Field (Placed above Asset Drop-Off) -->
+      <div class="form-group">
+        <label class="label" for="reference-link">Reference / Inspiration Link (Optional)</label>
+        <input type="text" id="reference-link" placeholder="https://youtube.com/... or https://tiktok.com/...">
+      </div>
+
+      <!-- Asset Drop-Off Field -->
+      <div class="form-group">
+        <label class="label" for="asset-link">Asset Drop-Off Link / Folder Box (Dropbox, Drive, Mega)</label>
+        <input type="text" id="asset-link" required placeholder="https://dropbox.com/... or https://drive.google.com/...">
+      </div>
+
+      <!-- Payment Method Selection -->
+      <div class="form-group">
+        <label class="label" for="payment-option">Preferred Payment Option</label>
+        <select id="payment-option" required>
+          <option value="" disabled selected>Select payment method...</option>
+          <option value="card">Credit / Debit Card</option>
+          <option value="paypal">PayPal</option>
+          <option value="cashapp">Cash App</option>
+          <option value="crypto">Cryptocurrency</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="label" for="details">Project Details / Message (Optional)</label>
+        <textarea id="details" placeholder="Tell us about your timeline, video duration, or specific notes..."></textarea>
+      </div>
+
+      <!-- Terms of Service Box -->
+      <div class="label">Terms of Service</div>
+      <div class="tos-box">
+        <strong>Important Client Guidelines:</strong>
+        <ul>
+          <li><strong>Revisions:</strong> Up to 2 free revisions per project. Additional revisions incur extra fees.</li>
+          <li><strong>Quality & Scope:</strong> Allocated budget directly impacts turnaround time and motion design complexity.</li>
+          <li><strong>Refund Policy:</strong> Full refunds cannot be issued once work begins due to non-refundable payment processor and transfer fees.</li>
+          <li><strong>Assets:</strong> Clients are responsible for providing high-quality raw files and clearing copyright usage for audio assets.</li>
+        </ul>
+      </div>
+
+      <!-- Unchecked TOS Confirmation -->
+      <div class="checkbox-group">
+        <input type="checkbox" id="tos-agree" onchange="toggleSubmitButton(this.checked)">
+        <label for="tos-agree">I have read and agree to the Terms of Service.</label>
+      </div>
+
+      <button type="submit" id="submit-btn" class="submit-btn" disabled>Send Message</button>
+    </form>
   </div>
-</header>
 
-<section id="hero">
-  <div class="letterbox"></div>
-  <div class="container hero-inner">
-    <div class="hero-eyebrow"><span class="dot"></span> 00:00:00:00 · MOTION GRAPHICS &amp; POST-PRODUCTION</div>
-    <h1>Turning footage into stories that <em>land.</em></h1>
-    <p class="lede">SequencedFx creates motion graphics and edits video for brands, businesses, and creators — animated content, social edits, and commercial work, crafted with pace, clarity, and a professional finish.</p>
-    <div class="btn-row">
-      <a href="#contact" class="btn btn-primary cut">Start a Project</a>
-      <a href="#work" class="btn btn-ghost cut">View the Reel</a>
-    </div>
+  <script>
+    function handleProjectTypeChange(value) {
+      const customBudgetGroup = document.getElementById('custom-budget-group');
+      if (value === 'other') {
+        customBudgetGroup.style.display = 'flex';
+      } else {
+        customBudgetGroup.style.display = 'none';
+      }
+    }
 
-    <div class="timeline-strip">
-      <div class="timeline-track"></div>
-      <div class="playhead"></div>
-      <div class="clip-row">
-        <div class="clip-block"><div class="num">50+</div><div class="lbl">Projects Delivered</div></div>
-        <div class="clip-block"><div class="num">3</div><div class="lbl">Years Experience</div></div>
-        <div class="clip-block"><div class="num">40+</div><div class="lbl">Happy Clients</div></div>
-      </div>
-      <div class="waveform" id="waveform"></div>
-    </div>
-  </div>
-  <div class="letterbox"></div>
-</section>
-
-<section id="services">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">01:12 · Services</div>
-      <h2>What we create</h2>
-      <p>Have a style in mind? Share a reference clip or link and we'll match its pacing, tone, and visual feel as closely as we can — that approach carries across every service below.</p>
-    </div>
-    <div class="grid-3">
-      <div class="svc-card cut-sm">
-        <div class="svc-icon cut-sm"><svg viewBox="0 0 24 24"><path d="M12 3 L14 10 L21 12 L14 14 L12 21 L10 14 L3 12 L10 10 Z" fill="#FFFFFF" stroke="none"/></svg></div>
-        <h3>Motion Graphics &amp; Animation</h3>
-        <p>Custom titles, lower-thirds, and animated graphics that elevate any piece of footage.</p>
-      </div>
-      <div class="svc-card cut-sm">
-        <div class="svc-icon cut-sm"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><polygon points="10,8 10,16 16,12" fill="#FFFFFF" stroke="none"/></svg></div>
-        <h3>Corporate &amp; Brand Videos</h3>
-        <p>Polished video content that communicates your brand's message clearly and professionally.</p>
-      </div>
-      <div class="svc-card cut-sm">
-        <div class="svc-icon cut-sm"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="1"/><polygon points="10.5,9 10.5,15 15,12" fill="#FFFFFF" stroke="none"/></svg></div>
-        <h3>Social Media Content</h3>
-        <p>Scroll-stopping edits optimized for Instagram, TikTok, and YouTube Shorts.</p>
-      </div>
-      <div class="svc-card cut-sm">
-        <div class="svc-icon cut-sm"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.3" fill="#FFFFFF" stroke="none"/></svg></div>
-        <h3>Commercial &amp; Ad Editing</h3>
-        <p>High-impact edits built to convert — from concept through to final delivery.</p>
-      </div>
-      <div class="svc-card cut-sm">
-        <div class="svc-icon cut-sm"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><circle cx="15" cy="9" r="6"/><circle cx="12" cy="14" r="6"/></svg></div>
-        <h3>Color Grading &amp; Correction</h3>
-        <p>Cinematic color work that gives every project a consistent, professional look.</p>
-      </div>
-      <div class="svc-card cut-sm">
-        <div class="svc-icon cut-sm"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/><line x1="9" y1="5" x2="9" y2="19"/><line x1="15" y1="5" x2="15" y2="19"/><circle cx="6" cy="8" r="0.7" fill="#FFFFFF" stroke="none"/><circle cx="6" cy="16" r="0.7" fill="#FFFFFF" stroke="none"/><circle cx="18" cy="8" r="0.7" fill="#FFFFFF" stroke="none"/><circle cx="18" cy="16" r="0.7" fill="#FFFFFF" stroke="none"/></svg></div>
-        <h3>Documentary &amp; Long-Form</h3>
-        <p>Thoughtful, story-driven editing for documentaries, interviews, and long-form content.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="work">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">02:47 · Selected Work</div>
-      <h2>Recent edits</h2>
-      <p>Placeholder projects for now — send over your real videos and I'll drop them in here in place of these tiles.</p>
-    </div>
-    <div class="work-grid">
-      <div class="work-card"><div class="thumb g1"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Brand Film — Northline Co.</h4><span>Corporate</span></div></div>
-      <div class="work-card"><div class="thumb g2"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Product Launch Reel</h4><span>Commercial</span></div></div>
-      <div class="work-card"><div class="thumb g3"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Social Campaign Series</h4><span>Social Media</span></div></div>
-      <div class="work-card"><div class="thumb g4"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>App Launch — Animated Titles</h4><span>Motion Graphics</span></div></div>
-      <div class="work-card"><div class="thumb g5"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Documentary Short — Working Title</h4><span>Documentary</span></div></div>
-      <div class="work-card"><div class="thumb g6"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Music Video Edit</h4><span>Music</span></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-visual cut">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7"/><circle cx="12" cy="13" r="2.6"/><path d="M9 6 L10.5 4 H13.5 L15 6"/></svg>
-      </div>
-      <div class="about-copy">
-        <div class="eyebrow">04:03 · About</div>
-        <h2 style="margin-bottom:20px;">Hi, I'm the editor behind SequencedFx.</h2>
-        <p><strong>I'm a motion graphics artist and video editor with 3 years of experience</strong> helping brands, businesses, and creators turn raw footage into polished, compelling stories.</p>
-        <p>From animated titles to corporate videos to social content, I bring a sharp eye for pacing, color, and motion to every project — combined with clear communication and reliable turnaround times.</p>
-        <div class="tag-row">
-          <span class="tag-pill">After Effects</span>
-          <span class="tag-pill">Premiere Pro</span>
-          <span class="tag-pill">DaVinci Resolve</span>
-          <span class="tag-pill">CapCut</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="process">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">05:20 · How We Work</div>
-      <h2>A clear, simple process</h2>
-    </div>
-    <div class="process-list">
-      <div class="process-step"><span class="step-num mono">STEP 01</span><h4>Discovery Call</h4><p>We talk through your project, goals, and footage so I understand exactly what you need.</p></div>
-      <div class="process-step"><span class="step-num mono">STEP 02</span><h4>Edit Plan</h4><p>I review your footage and put together a structure and timeline before cutting begins.</p></div>
-      <div class="process-step"><span class="step-num mono">STEP 03</span><h4>First Cut &amp; Revisions</h4><p>You get a first cut to review, with rounds of revisions until it's exactly right.</p></div>
-      <div class="process-step"><span class="step-num mono">STEP 04</span><h4>Final Delivery</h4><p>Final files delivered in whatever formats you need, ready to publish.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="testimonials">
-  <div class="container">
-    <div class="section-head">
-      <div class="eyebrow">06:38 · Client Words</div>
-      <h2>What clients say</h2>
-    </div>
-    <div class="testi-grid">
-      <div class="testi-card"><span class="qmark">"</span><p>SequencedFx brought our brand video to life exactly as we envisioned — maybe even better. Fast turnaround and great communication throughout.</p><div class="testi-who">CLIENT NAME — COMPANY</div></div>
-      <div class="testi-card"><span class="qmark">"</span><p>Working with SequencedFx made our product launch video so much easier. Professional, responsive, and genuinely talented.</p><div class="testi-who">CLIENT NAME — COMPANY</div></div>
-      <div class="testi-card"><span class="qmark">"</span><p>The color grading alone took our footage to another level. Highly recommend for any brand serious about video quality.</p><div class="testi-who">CLIENT NAME — COMPANY</div></div>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <div class="container">
-    <div class="contact-grid">
-      <div class="contact-info">
-        <div class="eyebrow">07:55 · Start a Project</div>
-        <h2 style="margin-bottom:18px;">Let's cut something great.</h2>
-        <p>Tell me about your project and I'll get back to you within one business day.</p>
-        <div class="info-line"><span class="k">Email</span><a class="v" href="mailto:sequencedfx@gmail.com">sequencedfx@gmail.com</a></div>
-        <div class="info-line"><span class="k">Social</span><a class="v" href="https://www.instagram.com/sequencedfx?igsi=MTNyYnM0NmZzM3MzOQ==" target="_blank" rel="noopener noreferrer">Instagram</a></div>
-        <div class="info-line"><span class="k">Asset Delivery</span><span class="v">Dropbox / Google Drive / Mega</span></div>
-      </div>
-      <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="028f43bc-269d-415a-80a2-5779df8787e2">
-        <input type="hidden" name="subject" value="New project request — SequencedFx">
-        <input type="hidden" name="from_name" value="SequencedFx Website">
-        <div class="field"><label for="name">Name</label><input id="name" name="Name" type="text" required></div>
-        <div class="field"><label for="email">Email</label><input id="email" name="Email" type="email" required></div>
-        <div class="field"><label for="type">Project Type</label>
-          <select id="type" name="Project Type" required>
-            <option value="" disabled selected>Select project type…</option>
-            <option>Motion Graphics</option>
-            <option>Video Editing / Post Production</option>
-            <option>Full Package Edit</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="budget">Custom Budget ($ USD)</label>
-          <input id="budget" name="Custom Budget" type="text" placeholder="e.g. $750 or Flexible" required>
-        </div>
-        <div class="field"><label for="dropoff">Asset Drop-off Link / Folder Box (Dropbox, Drive, Mega, etc.)</label><input id="dropoff" name="Footage Dropoff Link" type="url" placeholder="https://dropbox.com/... or https://drive.google.com/..."></div>
-        <div class="field"><label for="message">Project Details / Message (optional)</label><textarea id="message" name="Message" placeholder="Tell us about your timeline, video duration, or specific style notes..."></textarea></div>
-        <button type="submit" class="btn btn-primary cut">Send Message</button>
-        <div id="form-error">Something went wrong sending that — please try again, or email <a href="mailto:sequencedfx@gmail.com" style="text-decoration:underline;">sequencedfx@gmail.com</a> directly.</div>
-      </form>
-      <div id="form-success" class="cut">
-        <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><path d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-        <p>Thanks — I've got your request and will follow up shortly.</p>
-        <div class="pay-btn-container">
-          <a href="https://stripe.com" target="_blank" rel="noopener noreferrer" class="btn-pay cut-sm">Pay Deposit Now</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="container footer-inner">
-    <a href="#hero" class="brand">SequencedFx <span class="tag">/ MOTION &amp; POST</span></a>
-    <ul class="footer-links">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </div>
-  <div class="container"><div class="copyright">© 2026 SequencedFx. All rights reserved.</div></div>
-</footer>
-
-<script>
-  // scroll progress scrubber
-  const fill = document.getElementById('scrubberFill');
-  function updateScrubber(){
-    const h = document.documentElement;
-    const scrolled = h.scrollTop;
-    const height = h.scrollHeight - h.clientHeight;
-    const pct = height > 0 ? (scrolled / height) * 100 : 0;
-    fill.style.width = pct + '%';
-  }
-  window.addEventListener('scroll', updateScrubber);
-  updateScrubber();
-
-  // header background on scroll
-  const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 40);
-  });
-
-  // mobile menu
-  const toggle = document.getElementById('menuToggle');
-  const links = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => links.classList.toggle('open'));
-  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
-
-  // waveform bars
-  const wf = document.getElementById('waveform');
-  for (let i = 0; i < 60; i++) {
-    const bar = document.createElement('span');
-    bar.style.height = (Math.random() * 18 + 4) + 'px';
-    bar.style.animationDelay = (Math.random() * 1.6).toFixed(2) + 's';
-    wf.appendChild(bar);
-  }
-
-  // contact form submit
-  const form = document.getElementById('contactForm');
-  const success = document.getElementById('form-success');
-  const errorBox = document.getElementById('form-error');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    errorBox.style.display = 'none';
-    const submitBtn = form.querySelector('button[type=submit]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending…';
-    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          form.style.display = 'none';
-          success.style.display = 'block';
-        } else {
-          errorBox.style.display = 'block';
-        }
-      })
-      .catch(() => { errorBox.style.display = 'block'; })
-      .finally(() => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Message';
-      });
-  });
-</script>
+    function toggleSubmitButton(isConfirmed) {
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = !isConfirmed;
+    }
+  </script>
 
 </body>
 </html>

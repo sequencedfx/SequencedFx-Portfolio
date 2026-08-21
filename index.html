@@ -212,6 +212,12 @@
   .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--signal); outline:none;}
   .field textarea{resize:vertical; min-height:90px;}
   .field select option{background:var(--ink);}
+  
+  /* Payment / Deposit Button Styling */
+  .pay-btn-container{margin-top:20px;}
+  .btn-pay{display:inline-block; background:#000000; color:#FFFFFF; padding:12px 24px; font-family:'IBM Plex Mono',monospace; font-size:0.85rem; font-weight:600; text-transform:uppercase; border:1px solid #000000; transition:all 0.2s ease;}
+  .btn-pay:hover{background:#2E2E2E; color:#FFFFFF; border-color:#2E2E2E;}
+
   #form-success{display:none; grid-column:1/-1; margin-top:8px; padding:36px 28px; background:var(--signal); color:var(--ink); text-align:center;}
   #form-success svg{width:44px; height:44px; stroke:var(--ink); fill:none; stroke-width:3; margin:0 auto 16px;}
   #form-success p{font-size:1rem; font-weight:600; max-width:360px; margin:0 auto;}
@@ -414,15 +420,9 @@
             <option>Other</option>
           </select>
         </div>
-        <div class="field"><label for="budget">Budget Range</label>
-          <select id="budget" name="Budget" required>
-            <option value="" disabled selected>Select your budget range…</option>
-            <option value="Under $500">Under $500</option>
-            <option value="$500 - $1,000">$500 - $1,000</option>
-            <option value="$1,000 - $2,500">$1,000 - $2,500</option>
-            <option value="$2,500 - $5,000">$2,500 - $5,000</option>
-            <option value="$5,000+">$5,000+</option>
-          </select>
+        <div class="field">
+          <label for="budget">Custom Budget ($ USD)</label>
+          <input id="budget" name="Custom Budget" type="text" placeholder="e.g. $750 or Flexible" required>
         </div>
         <div class="field"><label for="dropoff">Asset Drop-off Link / Folder Box (Dropbox, Drive, Mega, etc.)</label><input id="dropoff" name="Footage Dropoff Link" type="url" placeholder="https://dropbox.com/... or https://drive.google.com/..."></div>
         <div class="field"><label for="message">Project Details / Message (optional)</label><textarea id="message" name="Message" placeholder="Tell us about your timeline, video duration, or specific style notes..."></textarea></div>
@@ -432,6 +432,9 @@
       <div id="form-success" class="cut">
         <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><path d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
         <p>Thanks — I've got your request and will follow up shortly.</p>
+        <div class="pay-btn-container">
+          <a href="https://stripe.com" target="_blank" rel="noopener noreferrer" class="btn-pay cut-sm">Pay Deposit Now</a>
+        </div>
       </div>
     </div>
   </div>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Fall of Natanim | Documentary</title>
+  <style>
+    :root {
+      --bg-color: #0b0c10;
+      --card-bg: #1f2833;
+      --text-main: #edf5e1;
+      --accent-glow: #ff2a6d;
+      --secondary-glow: #05d9e8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    /* Hero Section with Glowing Text */
+    header {
+      text-align: center;
+      padding: 60px 20px;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #fff;
+      text-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent-glow), 0 0 40px var(--accent-glow);
+      animation: pulseGlow 3s infinite alternate;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      color: var(--secondary-glow);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* Documentary Chapters */
+    .chapter {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+
+    /* Custom Scale & Glow Animation on Hover */
+    .chapter:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba(5, 217, 232, 0.4);
+      border-color: var(--secondary-glow);
+    }
+
+    .chapter-number {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--accent-glow);
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+
+    .chapter h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    /* Keyframe Animations */
+    @keyframes pulseGlow {
+      0% {
+        text-shadow: 0 0 10px var(--accent-glow), 0 0 20px var(--accent-glow);
+      }
+      100% {
+        text-shadow: 0 0 15px var(--accent-glow), 0 0 35px var(--accent-glow), 0 0 50px var(--accent-glow);
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Natanim</h1>
+      <p class="tagline">Truth, Identity, and the Collapse</p>
+    </header>
+
+    <main>
+      <section class="chapter">
+        <div class="chapter-number">Chapter I</div>
+        <h2>The Revelation</h2>
+        <p>
+          Behind closed doors, Natanim lived a dual life. When he finally came out and embraced his true identity as a gay man, it shattered the false narrative he had constructed for years, throwing his circle into immediate turbulence.
+        </p>
+      </section>
+
+      <section class="chapter">
+        <div class="chapter-number">Chapter II</div>
+        <h2>The Fallout</h2>
+        <p>
+          Authenticity came at a high cost. As secrets unravelled, key alliances crumbled. Internal conflicts within his team quickly escalated into public disputes, setting off an unstoppable chain reaction.
+        </p>
+      </section>
+
+      <section class="chapter">
+        <div class="chapter-number">Chapter III</div>
+        <h2>The Downfall</h2>
+        <p>
+          Miscalculations and betrayal sealed his fate. What took years to build collapsed in a matter of weeks, leaving behind only the wreckage of a once-promising legacy and a cautionary tale of unchecked ambition.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2026 Mini-Documentary Archives. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+</body>
+</html>

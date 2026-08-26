@@ -198,7 +198,7 @@
   /* Contact & Form */
   .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px;}
   .contact-info p{color:var(--muted); margin-bottom:32px; max-width:400px;}
-  .info-line{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:20px;}
+  .info-line{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-space-between; align-items:center; gap:20px;}
   .info-line:last-child{border-bottom:1px solid var(--line);}
   .info-line .k{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
   .info-line .v{font-size:0.95rem;}
@@ -226,7 +226,9 @@
 
   #form-success{display:none; grid-column:1/-1; margin-top:8px; padding:36px 28px; background:var(--signal); color:var(--ink); text-align:center;}
   #form-success svg{width:44px; height:44px; stroke:var(--ink); fill:none; stroke-width:3; margin:0 auto 16px;}
-  #form-success p{font-size:1rem; font-weight:600; max-width:380px; margin:0 auto;}
+  #form-success p{font-size:1rem; font-weight:600; max-width:400px; margin:0 auto 12px;}
+  .order-number-badge{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:1.1rem; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); padding:8px 18px; letter-spacing:0.08em; margin-top:8px;}
+
   #form-error{display:none; margin-top:18px; padding:14px 16px; background:rgba(0,0,0,0.04); border:1px solid var(--signal-dim); font-size:0.9rem;}
 
   @media (max-width:860px){ .contact-grid{grid-template-columns:1fr; gap:44px;} }
@@ -421,10 +423,13 @@
       </div>
 
       <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
-        <!-- Updated Access Key -->
+        <!-- Web3Forms Access Key & Configuration -->
         <input type="hidden" name="access_key" value="9553d266-22fd-4a32-96fc-62d1878503af">
         <input type="hidden" name="subject" value="New project request — SequencedFx">
         <input type="hidden" name="from_name" value="SequencedFx Website">
+        
+        <!-- Generated Order Reference hidden field sent with email -->
+        <input type="hidden" name="Order Reference" id="orderRefInput" value="">
 
         <div class="field"><label for="name">Name</label><input id="name" name="Name" type="text" required></div>
         <div class="field"><label for="email">Email</label><input id="email" name="Email" type="email" required></div>
@@ -497,7 +502,8 @@
 
       <div id="form-success" class="cut">
         <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><path d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-        <p>Details confirmed! Please keep an eye on your email for updates and notifications.</p>
+        <p>Project inquiry confirmed! Keep an eye on your inbox for our follow-up email.</p>
+        <div class="order-number-badge">Order Ref: <span id="displayOrderNum">#SFX-000000</span></div>
       </div>
     </div>
   </div>
@@ -560,16 +566,34 @@
     document.getElementById('submitBtn').disabled = !checked;
   }
 
-  // Form submit
+  // Generate random order reference code
+  function generateOrderRef() {
+    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 6; i++) {
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return '#SFX-' + code;
+  }
+
+  // Form submit logic
   const form = document.getElementById('contactForm');
   const success = document.getElementById('form-success');
   const errorBox = document.getElementById('form-error');
+  
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     errorBox.style.display = 'none';
+    
+    // Generate Order Ref code
+    const orderID = generateOrderRef();
+    document.getElementById('orderRefInput').value = orderID;
+    document.getElementById('displayOrderNum').textContent = orderID;
+
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
+
     fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
       .then(res => res.json())
       .then(data => {

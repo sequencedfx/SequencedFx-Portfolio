@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kai Cenat & Speed LAPIS Meme</title>
+  <style>
+    :root {
+      --lapis-blue: #103ba0;
+      --lapis-glow: #00d4ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0d0e15;
+      color: #fff;
+      font-family: 'Impact', 'Arial Black', sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Screen Shake Effect */
+    .shake {
+      animation: screenShake 0.05s infinite alternate;
+    }
+
+    @keyframes screenShake {
+      0% { transform: translate(5px, 5px) rotate(1deg); }
+      100% { transform: translate(-5px, -5px) rotate(-1deg); }
+    }
+
+    /* Lapis Block Header */
+    .lapis-block {
+      width: 120px;
+      height: 120px;
+      background-color: var(--lapis-blue);
+      border: 4px solid #000;
+      box-shadow: inset -10px -10px 0px rgba(0,0,0,0.4), inset 10px 10px 0px rgba(255,255,255,0.2), 0 0 20px var(--lapis-glow);
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .lapis-block:hover {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Main Text Overlay */
+    h1 {
+      font-size: 5rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 4px 4px 0px #000, 0 0 30px var(--lapis-glow);
+      user-select: none;
+    }
+
+    /* Trigger Button */
+    .trigger-btn {
+      margin-top: 30px;
+      padding: 15px 40px;
+      font-size: 1.8rem;
+      font-family: inherit;
+      color: #fff;
+      background: linear-gradient(135deg, #1d4ed8, #0284c7);
+      border: 3px solid #000;
+      border-radius: 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 0 6px 0 #000;
+      transition: all 0.1s ease;
+    }
+
+    .trigger-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 0 0 #000;
+    }
+
+    /* Floating Meme Text */
+    .floating-text {
+      position: absolute;
+      font-size: 4rem;
+      color: #00f0ff;
+      text-shadow: 3px 3px 0 #000;
+      pointer-events: none;
+      animation: floatUp 1s forwards ease-out;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(0.5); }
+      100% { opacity: 0; transform: translateY(-150px) scale(1.5); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lapis-block" id="block" onclick="triggerMeme()"></div>
+  <h1 id="memeText">IT'S LAPIS!</h1>
+  <p style="font-family: sans-serif; color: #aaa; margin-top: 10px;">(Thinking it was Diamond)</p>
+
+  <button class="trigger-btn" onclick="triggerMeme()">CRASH OUT 🗣️</button>
+
+  <script>
+    function triggerMeme() {
+      const body = document.body;
+      const memeText = document.getElementById('memeText');
+
+      // Trigger Screen Shake
+      body.classList.add('shake');
+      memeText.innerText = "LAPIS LAZULI!!";
+      memeText.style.color = "#ff2a6d";
+
+      // Spawn Floating Text Spams
+      for (let i = 0; i < 5; i++) {
+        spawnFloatingText();
+      }
+
+      // Play Synthetic Explosion/Shout Sound Effect via Web Audio API
+      playLapisSound();
+
+      // Reset after 1.5s
+      setTimeout(() => {
+        body.classList.remove('shake');
+        memeText.innerText = "IT'S LAPIS!";
+        memeText.style.color = "#fff";
+      }, 1500);
+    }
+
+    function spawnFloatingText() {
+      const el = document.createElement('div');
+      el.className = 'floating-text';
+      el.innerText = Math.random() > 0.5 ? 'LAPIS! 🟦' : 'NOT DIAMONDS! 😭';
+      el.style.left = Math.random() * (window.innerWidth - 200) + 'px';
+      el.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+      document.body.appendChild(el);
+
+      setTimeout(() => el.remove(), 1000);
+    }
+
+    function playLapisSound() {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(150, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.3);
+
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.5);
+    }
+  </script>
+</body>
+</html>

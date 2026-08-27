@@ -253,7 +253,7 @@
   /* Contact & Form */
   .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px;}
   .contact-info p{color:var(--muted); margin-bottom:32px; max-width:400px;}
-  .info-line{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-space-between; align-items:center; gap:20px;}
+  .info-line{padding:16px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:20px;}
   .info-line:last-child{border-bottom:1px solid var(--line);}
   .info-line .k{font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;}
   .info-line .v{font-size:0.95rem;}
@@ -273,6 +273,10 @@
   .tos-box strong{color:var(--paper);}
   .tos-box ul{padding-left:18px; margin-top:6px;}
 
+  .checkbox-field{display:flex; align-items:flex-start; gap:10px; margin-bottom:24px;}
+  .checkbox-field input[type="checkbox"]{width:auto; margin-top:4px; cursor:pointer;}
+  .checkbox-field label{font-size:0.82rem; text-transform:none; letter-spacing:normal; color:var(--paper); cursor:pointer;}
+
   #form-success{display:none; grid-column:1/-1; margin-top:8px; padding:36px 28px; background:var(--signal); color:var(--ink); text-align:center;}
   #form-success svg{width:44px; height:44px; stroke:var(--ink); fill:none; stroke-width:3; margin:0 auto 16px;}
   #form-success p{font-size:1rem; font-weight:600; max-width:400px; margin:0 auto 12px;}
@@ -284,7 +288,7 @@
 
   /* Footer */
   footer{border-top:1px solid var(--line); padding:44px 0;}
-  .footer-inner{display:flex; justify-space-between; align-items:center; flex-wrap:wrap; gap:20px;}
+  .footer-inner{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;}
   .footer-inner .brand{font-size:1rem;}
   .footer-links{display:flex; gap:26px;}
   .footer-links a{font-size:0.85rem; color:var(--muted);}
@@ -428,6 +432,15 @@
   </div>
 </section>
 
+<!-- Video Modal -->
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-overlay" onclick="closeVideoModal()"></div>
+  <div class="video-modal-container cut-sm">
+    <button class="video-modal-close" onclick="closeVideoModal()">&times;</button>
+    <div class="video-modal-body" id="videoModalBody"></div>
+  </div>
+</div>
+
 <section id="about">
   <div class="container">
     <div class="about-grid">
@@ -536,37 +549,35 @@
         </div>
 
         <div class="field">
-          <label for="dropoff">Asset Drop-off Link / Folder Box (Dropbox, Drive, Mega, etc.)</label>
-          <input id="dropoff" name="Footage Dropoff Link" type="url" placeholder="https://dropbox.com/... or https://drive.google.com/...">
+          <label for="details">Project Details</label>
+          <textarea id="details" name="Project Details" placeholder="Tell us about your timeline, video length, main goal..." required></textarea>
         </div>
 
-        <div class="field">
-          <label for="payment">Preferred Payment Method</label>
-          <select id="payment" name="Preferred Payment Method" required>
-            <option value="" disabled selected>Select payment method…</option>
-            <option value="Credit / Debit Card">Credit / Debit Card</option>
-            <option value="PayPal">PayPal</option>
-            <option value="Cash App">Cash App</option>
-          </select>
+        <div class="tos-box">
+          <strong>Terms &amp; Service Conditions:</strong>
+          <ul>
+            <li>Turnaround times depend on project scope and asset delivery speed.</li>
+            <li>Revisions cover minor adjustments; structural changes may require an updated scope.</li>
+            <li>Assets must be provided via cloud link (Drive, Dropbox, Mega) in accessible formats.</li>
+            <li>Deposits or upfront payments may be required prior to kickoff.</li>
+          </ul>
         </div>
 
-        <div class="field"><label for="message">Project Details / Message (optional)</label><textarea id="message" name="Message" placeholder="Tell us about your timeline, video duration, or specific style notes..."></textarea></div>
-
-        <div class="field" style="margin-bottom:12px;">
-          <label>Terms of Service</label>
-          <div class="tos-box">
-            <strong>Important Client Guidelines:</strong>
-            <ul>
-              <li><strong>Payment Schedule:</strong> 50% payment upfront required before work starts, and 50% upon final video completion.</li>
-              <li><strong>Revisions:</strong> Up to 2 free revisions per project. Additional revisions incur extra fees.</li>
-              <li><strong>Budget &amp; Scope:</strong> Allocated budget directly affects turnaround time and motion graphics complexity.</li>
-              <li><strong>Refund Policy:</strong> Full refunds cannot be issued once work begins due to non-refundable payment transfer fees.</li>
-              <li><strong>Assets:</strong> Clients are responsible for providing accessible raw assets and clearing audio copyrights.</li>
-            </ul>
-          </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="tos_agree" name="TOS Agreement" required>
+          <label for="tos_agree">I have read and agree to the Terms &amp; Service conditions above.</label>
         </div>
 
-        <button type="submit" class="btn btn-primary cut width-100">Send Inquiry</button>
+        <button type="submit" class="btn btn-primary cut" style="width:100%; border:none; cursor:pointer;">Send Inquiry</button>
+
+        <div id="form-success" class="cut-sm">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <p>Your inquiry has been submitted successfully!</p>
+          <div>Your Order Reference Number:</div>
+          <div class="order-number-badge" id="orderNumberDisplay">#SQX-00000</div>
+        </div>
+
+        <div id="form-error">Something went wrong submitting your form. Please try again or email us directly.</div>
       </form>
     </div>
   </div>
@@ -579,102 +590,150 @@
       <a href="#services">Services</a>
       <a href="#work">Work</a>
       <a href="#about">About</a>
+      <a href="#process">Process</a>
       <a href="#contact">Contact</a>
     </div>
   </div>
-  <div class="container copyright">© 2026 SequencedFx. All rights reserved.</div>
+  <div class="container">
+    <div class="copyright">© <span id="year"></span> SequencedFx. All rights reserved.</div>
+  </div>
 </footer>
 
-<div id="videoModal" class="video-modal" aria-hidden="true">
-  <div class="video-modal-overlay" onclick="closeVideoModal()"></div>
-  <div class="video-modal-container cut-sm">
-    <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Close modal">&times;</button>
-    <div id="videoModalBody" class="video-modal-body"></div>
-  </div>
-</div>
-
 <script>
-  // Mobile Nav Toggle
+  // Dynamic Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Mobile Menu Toggle
   const menuToggle = document.getElementById('menuToggle');
   const navLinks = document.getElementById('navLinks');
   menuToggle.addEventListener('click', () => {
     navLinks.classList.toggle('open');
   });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
 
-  // Header & Scrubber Scroll Logic
+  // Header Scroll Effect & Scrubber Bar
+  const header = document.getElementById('siteHeader');
+  const scrubberFill = document.getElementById('scrubberFill');
   window.addEventListener('scroll', () => {
-    const header = document.getElementById('siteHeader');
-    const scrubberFill = document.getElementById('scrubberFill');
-    const winScroll = document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    
-    if (winScroll > 50) {
+    if (window.scrollY > 40) {
       header.classList.add('scrolled');
     } else {
       header.classList.remove('scrolled');
     }
 
-    if (height > 0) {
-      const scrolled = (winScroll / height) * 100;
-      scrubberFill.style.width = scrolled + '%';
-    }
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    scrubberFill.style.width = scrolled + '%';
   });
 
-  // Conditional Select Field
+  // Generate Waveform Bars dynamically
+  const waveform = document.getElementById('waveform');
+  for (let i = 0; i < 48; i++) {
+    const bar = document.createElement('span');
+    const delay = (Math.random() * 1.5).toFixed(2);
+    const duration = (1.2 + Math.random() * 0.8).toFixed(2);
+    bar.style.animationDelay = `${delay}s`;
+    bar.style.animationDuration = `${duration}s`;
+    waveform.appendChild(bar);
+  }
+
+  // Handle Conditional "Other" Project Type Field
   function handleTypeChange(val) {
     const otherField = document.getElementById('otherCategoryField');
+    const otherInput = document.getElementById('other_category');
     if (val === 'Other') {
       otherField.style.display = 'block';
+      otherInput.setAttribute('required', 'true');
     } else {
       otherField.style.display = 'none';
+      otherInput.removeAttribute('required');
+      otherInput.value = '';
     }
   }
 
-  // Dynamic Video Lightbox Modal System
-  function openVideoModal(element) {
-    const modal = document.getElementById('videoModal');
-    const modalBody = document.getElementById('videoModalBody');
-    const videoType = element.getAttribute('data-video-type');
-    const videoSrc = element.getAttribute('data-video-src');
+  // Generate Random Order Reference Code (e.g. #SQX-8F3A1)
+  function generateOrderRef() {
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let code = '';
+    for (let i = 0; i < 5; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return '#SQX-' + code;
+  }
 
-    if (!videoSrc) return;
+  // Form Submission handling via AJAX for Web3Forms
+  const contactForm = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('form-success');
+  const formError = document.getElementById('form-error');
 
-    modalBody.innerHTML = '';
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const orderRef = generateOrderRef();
+    document.getElementById('orderRefInput').value = orderRef;
 
-    if (videoType === 'mp4') {
-      modalBody.innerHTML = `
-        <video controls autoplay playsinline style="width:100%; height:100%;">
-          <source src="${videoSrc}" type="video/mp4">
-          Your browser does not support HTML5 video.
-        </video>
-      `;
-    } else if (videoType === 'embed') {
-      modalBody.innerHTML = `
-        <iframe src="${videoSrc}" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen 
-                style="width:100%; height:100%; border:none;">
-        </iframe>
-      `;
+    const formData = new FormData(contactForm);
+
+    fetch(contactForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(response => {
+      if (response.ok) {
+        contactForm.reset();
+        document.getElementById('otherCategoryField').style.display = 'none';
+        contactForm.querySelectorAll('.field, .tos-box, .checkbox-field, button[type="submit"]').forEach(el => el.style.display = 'none');
+        document.getElementById('orderNumberDisplay').textContent = orderRef;
+        formSuccess.style.display = 'block';
+        formError.style.display = 'none';
+      } else {
+        formError.style.display = 'block';
+      }
+    }).catch(error => {
+      formError.style.display = 'block';
+    });
+  });
+
+  // Video Lightbox Modal Controls
+  const videoModal = document.getElementById('videoModal');
+  const videoModalBody = document.getElementById('videoModalBody');
+
+  function openVideoModal(card) {
+    const type = card.getAttribute('data-video-type');
+    const src = card.getAttribute('data-video-src');
+    videoModalBody.innerHTML = '';
+
+    if (type === 'embed') {
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      videoModalBody.appendChild(iframe);
+    } else if (type === 'mp4') {
+      const video = document.createElement('video');
+      video.src = src;
+      video.controls = true;
+      video.autoplay = true;
+      videoModalBody.appendChild(video);
     }
 
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
+    videoModal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
 
   function closeVideoModal() {
-    const modal = document.getElementById('videoModal');
-    const modalBody = document.getElementById('videoModalBody');
-
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-    modalBody.innerHTML = ''; // Stops audio instantly
+    videoModal.classList.remove('active');
+    videoModalBody.innerHTML = '';
     document.body.style.overflow = '';
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && videoModal.classList.contains('active')) {
       closeVideoModal();
     }
   });

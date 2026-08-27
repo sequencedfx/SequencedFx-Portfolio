@@ -138,10 +138,10 @@
   @media (max-width:940px){ .grid-3{grid-template-columns:repeat(2,1fr);} }
   @media (max-width:600px){ .grid-3{grid-template-columns:1fr;} }
 
-  /* Work */
+  /* Work Grid & Lightbox Styles */
   .work-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
   .work-card{position:relative; aspect-ratio:4/3; overflow:hidden; cursor:pointer;}
-  .work-card .thumb{position:absolute; inset:0; transition:transform .4s ease;}
+  .work-card .thumb{position:absolute; inset:0; transition:transform .4s ease; background-size:cover; background-position:center;}
   .work-card:hover .thumb{transform:scale(1.06);}
   .g1{background:linear-gradient(135deg,#2e2e2e,#0a0a0a);}
   .g2{background:linear-gradient(160deg,#242424,#050505);}
@@ -158,6 +158,61 @@
   .work-info{position:absolute; left:0; right:0; bottom:0; padding:18px; background:linear-gradient(to top, rgba(10,10,10,0.92), transparent);}
   .work-info h4{font-family:'Inter',sans-serif; font-weight:600; font-size:1rem; margin-bottom:3px; color:#FFFFFF;}
   .work-info span{font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:#FFFFFF; letter-spacing:0.06em; text-transform:uppercase;}
+
+  /* Dynamic Video Lightbox Modal */
+  .video-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .video-modal.active { display: flex; }
+  .video-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(8px);
+  }
+  .video-modal-container {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+    z-index: 2001;
+    overflow: hidden;
+  }
+  .video-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 32px;
+    cursor: pointer;
+    z-index: 2002;
+    line-height: 1;
+    transition: opacity 0.2s ease;
+  }
+  .video-modal-close:hover { opacity: 0.6; }
+  .video-modal-body {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000000;
+  }
+  .video-modal-body video,
+  .video-modal-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: contain;
+  }
 
   @media (max-width:940px){ .work-grid{grid-template-columns:repeat(2,1fr);} }
   @media (max-width:600px){ .work-grid{grid-template-columns:1fr;} }
@@ -217,12 +272,6 @@
   .tos-box{border:1px solid var(--line); padding:16px; background:var(--panel-2); font-size:0.85rem; color:var(--muted); line-height:1.5; max-height:140px; overflow-y:auto; margin-bottom:16px;}
   .tos-box strong{color:var(--paper);}
   .tos-box ul{padding-left:18px; margin-top:6px;}
-  .checkbox-group{display:flex; align-items:center; gap:10px; margin-bottom:24px;}
-  .checkbox-group input[type="checkbox"]{width:18px; height:18px; cursor:pointer;}
-  .checkbox-group label{font-size:0.85rem; color:var(--paper); cursor:pointer;}
-
-  /* Submit Button */
-  .submit-btn:disabled{opacity:0.4; cursor:not-allowed;}
 
   #form-success{display:none; grid-column:1/-1; margin-top:8px; padding:36px 28px; background:var(--signal); color:var(--ink); text-align:center;}
   #form-success svg{width:44px; height:44px; stroke:var(--ink); fill:none; stroke-width:3; margin:0 auto 16px;}
@@ -337,15 +386,44 @@
     <div class="section-head">
       <div class="eyebrow">02:47 · Selected Work</div>
       <h2>Recent edits</h2>
-      <p>Placeholder projects for now — send over your real videos and I'll drop them in here in place of these tiles.</p>
+      <p>Explore some of our recent motion graphics and edit showcases.</p>
     </div>
     <div class="work-grid">
-      <div class="work-card"><div class="thumb g1"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Brand Film — Northline Co.</h4><span>Corporate</span></div></div>
-      <div class="work-card"><div class="thumb g2"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Product Launch Reel</h4><span>Commercial</span></div></div>
-      <div class="work-card"><div class="thumb g3"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Social Campaign Series</h4><span>Social Media</span></div></div>
-      <div class="work-card"><div class="thumb g4"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>App Launch — Animated Titles</h4><span>Motion Graphics</span></div></div>
-      <div class="work-card"><div class="thumb g5"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Documentary Short — Working Title</h4><span>Documentary</span></div></div>
-      <div class="work-card"><div class="thumb g6"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span><div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div><div class="work-info"><h4>Music Video Edit</h4><span>Music</span></div></div>
+      <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/GPkeaG8C6Bw?autoplay=1" onclick="openVideoModal(this)">
+        <div class="thumb" style="background-image: url('https://i.ytimg.com/vi/GPkeaG8C6Bw/maxresdefault.jpg');"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
+        <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
+        <div class="work-info"><h4>Custom Watermark</h4><span>Motion Graphics</span></div>
+      </div>
+
+      <div class="work-card cut-sm" data-video-type="mp4" data-video-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" onclick="openVideoModal(this)">
+        <div class="thumb g2"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
+        <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
+        <div class="work-info"><h4>Product Launch Reel</h4><span>Commercial</span></div>
+      </div>
+
+      <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" onclick="openVideoModal(this)">
+        <div class="thumb g3"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
+        <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
+        <div class="work-info"><h4>Social Campaign Series</h4><span>Social Media</span></div>
+      </div>
+
+      <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" onclick="openVideoModal(this)">
+        <div class="thumb g4"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
+        <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
+        <div class="work-info"><h4>App Launch — Animated Titles</h4><span>Motion Graphics</span></div>
+      </div>
+
+      <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" onclick="openVideoModal(this)">
+        <div class="thumb g5"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
+        <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
+        <div class="work-info"><h4>Documentary Short — Working Title</h4><span>Documentary</span></div>
+      </div>
+
+      <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" onclick="openVideoModal(this)">
+        <div class="thumb g6"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
+        <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
+        <div class="work-info"><h4>Music Video Edit</h4><span>Music</span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -423,12 +501,9 @@
       </div>
 
       <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
-        <!-- Web3Forms Access Key & Configuration -->
         <input type="hidden" name="access_key" value="9553d266-22fd-4a32-96fc-62d1878503af">
         <input type="hidden" name="subject" value="New project request — SequencedFx">
         <input type="hidden" name="from_name" value="SequencedFx Website">
-        
-        <!-- Generated Order Reference hidden field sent with email -->
         <input type="hidden" name="Order Reference" id="orderRefInput" value="">
 
         <div class="field"><label for="name">Name</label><input id="name" name="Name" type="text" required></div>
@@ -491,20 +566,8 @@
           </div>
         </div>
 
-        <div class="checkbox-group">
-          <input type="checkbox" id="tosAgree" onchange="toggleSubmit(this.checked)">
-          <label for="tosAgree">I have read and agree to the Terms of Service.</label>
-        </div>
-
-        <button type="submit" id="submitBtn" class="btn btn-primary cut submit-btn" disabled>Send Message</button>
-        <div id="form-error">Something went wrong sending that — please try again, or email <a href="mailto:sequencedfx@gmail.com" style="text-decoration:underline;">sequencedfx@gmail.com</a> directly.</div>
+        <button type="submit" class="btn btn-primary cut width-100">Send Inquiry</button>
       </form>
-
-      <div id="form-success" class="cut">
-        <svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="23"/><path d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-        <p>Project inquiry confirmed! Keep an eye on your inbox for our follow-up email.</p>
-        <div class="order-number-badge">Order Ref: <span id="displayOrderNum">#SFX-000000</span></div>
-      </div>
     </div>
   </div>
 </section>
@@ -512,107 +575,109 @@
 <footer>
   <div class="container footer-inner">
     <a href="#hero" class="brand">SequencedFx <span class="tag">/ MOTION &amp; POST</span></a>
-    <ul class="footer-links">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
   </div>
-  <div class="container"><div class="copyright">© 2026 SequencedFx. All rights reserved.</div></div>
+  <div class="container copyright">© 2026 SequencedFx. All rights reserved.</div>
 </footer>
 
-<script>
-  // Scrubber progress
-  const fill = document.getElementById('scrubberFill');
-  function updateScrubber(){
-    const h = document.documentElement;
-    const scrolled = h.scrollTop;
-    const height = h.scrollHeight - h.clientHeight;
-    const pct = height > 0 ? (scrolled / height) * 100 : 0;
-    fill.style.width = pct + '%';
-  }
-  window.addEventListener('scroll', updateScrubber);
-  updateScrubber();
+<div id="videoModal" class="video-modal" aria-hidden="true">
+  <div class="video-modal-overlay" onclick="closeVideoModal()"></div>
+  <div class="video-modal-container cut-sm">
+    <button class="video-modal-close" onclick="closeVideoModal()" aria-label="Close modal">&times;</button>
+    <div id="videoModalBody" class="video-modal-body"></div>
+  </div>
+</div>
 
-  // Header background on scroll
-  const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 40);
+<script>
+  // Mobile Nav Toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
   });
 
-  // Mobile menu
-  const toggle = document.getElementById('menuToggle');
-  const links = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => links.classList.toggle('open'));
-  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
-
-  // Waveform bars
-  const wf = document.getElementById('waveform');
-  for (let i = 0; i < 60; i++) {
-    const bar = document.createElement('span');
-    bar.style.height = (Math.random() * 18 + 4) + 'px';
-    bar.style.animationDelay = (Math.random() * 1.6).toFixed(2) + 's';
-    wf.appendChild(bar);
-  }
-
-  // Toggle dynamic fields
-  function handleTypeChange(val) {
-    const field = document.getElementById('otherCategoryField');
-    field.style.display = (val === 'Other') ? 'block' : 'none';
-  }
-
-  function toggleSubmit(checked) {
-    document.getElementById('submitBtn').disabled = !checked;
-  }
-
-  // Generate random order reference code
-  function generateOrderRef() {
-    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let code = '';
-    for (let i = 0; i < 6; i++) {
-      code += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return '#SFX-' + code;
-  }
-
-  // Form submit logic
-  const form = document.getElementById('contactForm');
-  const success = document.getElementById('form-success');
-  const errorBox = document.getElementById('form-error');
-  
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    errorBox.style.display = 'none';
+  // Header & Scrubber Scroll Logic
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('siteHeader');
+    const scrubberFill = document.getElementById('scrubberFill');
+    const winScroll = document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     
-    // Generate Order Ref code
-    const orderID = generateOrderRef();
-    document.getElementById('orderRefInput').value = orderID;
-    document.getElementById('displayOrderNum').textContent = orderID;
+    if (winScroll > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
 
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending…';
+    if (height > 0) {
+      const scrolled = (winScroll / height) * 100;
+      scrubberFill.style.width = scrolled + '%';
+    }
+  });
 
-    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          form.style.display = 'none';
-          success.style.display = 'block';
-        } else {
-          errorBox.style.display = 'block';
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Send Message';
-        }
-      })
-      .catch(() => { 
-        errorBox.style.display = 'block'; 
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Message';
-      });
+  // Conditional Select Field
+  function handleTypeChange(val) {
+    const otherField = document.getElementById('otherCategoryField');
+    if (val === 'Other') {
+      otherField.style.display = 'block';
+    } else {
+      otherField.style.display = 'none';
+    }
+  }
+
+  // Dynamic Video Lightbox Modal System
+  function openVideoModal(element) {
+    const modal = document.getElementById('videoModal');
+    const modalBody = document.getElementById('videoModalBody');
+    const videoType = element.getAttribute('data-video-type');
+    const videoSrc = element.getAttribute('data-video-src');
+
+    if (!videoSrc) return;
+
+    modalBody.innerHTML = '';
+
+    if (videoType === 'mp4') {
+      modalBody.innerHTML = `
+        <video controls autoplay playsinline style="width:100%; height:100%;">
+          <source src="${videoSrc}" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+      `;
+    } else if (videoType === 'embed') {
+      modalBody.innerHTML = `
+        <iframe src="${videoSrc}" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen 
+                style="width:100%; height:100%; border:none;">
+        </iframe>
+      `;
+    }
+
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideoModal() {
+    const modal = document.getElementById('videoModal');
+    const modalBody = document.getElementById('videoModalBody');
+
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    modalBody.innerHTML = ''; // Stops audio instantly
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeVideoModal();
+    }
   });
 </script>
-
 </body>
 </html>

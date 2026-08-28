@@ -393,16 +393,18 @@
       <p>Explore some of our recent motion graphics and edit showcases.</p>
     </div>
     <div class="work-grid">
+      <!-- Watermark Card 1 -->
       <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/GPkeaG8C6Bw?autoplay=1" onclick="openVideoModal(this)">
         <div class="thumb" style="background-image: url('https://i.ytimg.com/vi/GPkeaG8C6Bw/maxresdefault.jpg');"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
         <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
-        <div class="work-info"><h4>Custom Watermark</h4><span>Motion Graphics</span></div>
+        <div class="work-info"><h4>Custom Watermark 01</h4><span>Motion Graphics</span></div>
       </div>
 
-      <div class="work-card cut-sm" data-video-type="mp4" data-video-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" onclick="openVideoModal(this)">
-        <div class="thumb g2"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
+      <!-- Watermark Card 2 (Added right beside Card 1) -->
+      <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/M8HSw9Glgjs?autoplay=1" onclick="openVideoModal(this)">
+        <div class="thumb" style="background-image: url('https://i.ytimg.com/vi/M8HSw9Glgjs/maxresdefault.jpg');"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
         <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
-        <div class="work-info"><h4>Product Launch Reel</h4><span>Commercial</span></div>
+        <div class="work-info"><h4>Custom Watermark 02</h4><span>Motion Graphics</span></div>
       </div>
 
       <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" onclick="openVideoModal(this)">
@@ -523,7 +525,7 @@
         <div class="field"><label for="email">Email</label><input id="email" name="Email" type="email" required></div>
         
         <div class="field"><label for="type">Project Type</label>
-          <select id="type" name="Project Type" required onchange="handleTypeChange(this.value)">
+          <select id="type" name="Project Type" required>
             <option value="" disabled selected>Select project type…</option>
             <option value="Motion Graphics">Motion Graphics</option>
             <option value="Video Editing / Post Production">Video Editing / Post Production</option>
@@ -533,51 +535,9 @@
           </select>
         </div>
 
-        <div class="field conditional-field" id="otherCategoryField">
-          <label for="other_category">Custom Project Category</label>
-          <input id="other_category" name="Custom Project Category" type="text" placeholder="e.g. Stream Overlay, FX Promo, Shorts Batch...">
-        </div>
+        <div class="field"><label for="message">Message</label><textarea id="message" name="Message" placeholder="Tell us about your project..." required></textarea></div>
 
-        <div class="field">
-          <label for="budget">Custom Budget ($ USD)</label>
-          <input id="budget" name="Custom Budget" type="text" placeholder="e.g. $750 or Flexible" required>
-        </div>
-
-        <div class="field">
-          <label for="reference">Reference Style Link (Optional)</label>
-          <input id="reference" name="Reference Style Link" type="url" placeholder="https://youtube.com/... or https://tiktok.com/...">
-        </div>
-
-        <div class="field">
-          <label for="details">Project Details</label>
-          <textarea id="details" name="Project Details" placeholder="Tell us about your timeline, video length, main goal..." required></textarea>
-        </div>
-
-        <div class="tos-box">
-          <strong>Terms &amp; Service Conditions:</strong>
-          <ul>
-            <li>Turnaround times depend on project scope and asset delivery speed.</li>
-            <li>Revisions cover minor adjustments; structural changes may require an updated scope.</li>
-            <li>Assets must be provided via cloud link (Drive, Dropbox, Mega) in accessible formats.</li>
-            <li>Deposits or upfront payments may be required prior to kickoff.</li>
-          </ul>
-        </div>
-
-        <div class="checkbox-field">
-          <input type="checkbox" id="tos_agree" name="TOS Agreement" required>
-          <label for="tos_agree">I have read and agree to the Terms &amp; Service conditions above.</label>
-        </div>
-
-        <button type="submit" class="btn btn-primary cut" style="width:100%; border:none; cursor:pointer;">Send Inquiry</button>
-
-        <div id="form-success" class="cut-sm">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <p>Your inquiry has been submitted successfully!</p>
-          <div>Your Order Reference Number:</div>
-          <div class="order-number-badge" id="orderNumberDisplay">#SQX-00000</div>
-        </div>
-
-        <div id="form-error">Something went wrong submitting your form. Please try again or email us directly.</div>
+        <button type="submit" class="btn btn-primary cut">Send Message</button>
       </form>
     </div>
   </div>
@@ -590,33 +550,27 @@
       <a href="#services">Services</a>
       <a href="#work">Work</a>
       <a href="#about">About</a>
-      <a href="#process">Process</a>
       <a href="#contact">Contact</a>
     </div>
   </div>
   <div class="container">
-    <div class="copyright">© <span id="year"></span> SequencedFx. All rights reserved.</div>
+    <div class="copyright">© SequencedFx. All rights reserved.</div>
   </div>
 </footer>
 
 <script>
-  // Dynamic Year
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // Mobile Menu Toggle
+  // Mobile Nav Toggle
   const menuToggle = document.getElementById('menuToggle');
   const navLinks = document.getElementById('navLinks');
-  menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-  });
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => navLinks.classList.remove('open'));
-  });
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+  }
 
-  // Header Scroll Effect & Scrubber Bar
-  const header = document.getElementById('siteHeader');
-  const scrubberFill = document.getElementById('scrubberFill');
+  // Header Scroll Effect & Progress Scrubber
   window.addEventListener('scroll', () => {
+    const header = document.getElementById('siteHeader');
     if (window.scrollY > 40) {
       header.classList.add('scrolled');
     } else {
@@ -626,117 +580,43 @@
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (winScroll / height) * 100;
-    scrubberFill.style.width = scrolled + '%';
+    const scrubber = document.getElementById('scrubberFill');
+    if (scrubber) scrubber.style.width = scrolled + '%';
   });
 
-  // Generate Waveform Bars dynamically
-  const waveform = document.getElementById('waveform');
-  for (let i = 0; i < 48; i++) {
-    const bar = document.createElement('span');
-    const delay = (Math.random() * 1.5).toFixed(2);
-    const duration = (1.2 + Math.random() * 0.8).toFixed(2);
-    bar.style.animationDelay = `${delay}s`;
-    bar.style.animationDuration = `${duration}s`;
-    waveform.appendChild(bar);
-  }
-
-  // Handle Conditional "Other" Project Type Field
-  function handleTypeChange(val) {
-    const otherField = document.getElementById('otherCategoryField');
-    const otherInput = document.getElementById('other_category');
-    if (val === 'Other') {
-      otherField.style.display = 'block';
-      otherInput.setAttribute('required', 'true');
-    } else {
-      otherField.style.display = 'none';
-      otherInput.removeAttribute('required');
-      otherInput.value = '';
-    }
-  }
-
-  // Generate Random Order Reference Code (e.g. #SQX-8F3A1)
-  function generateOrderRef() {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let code = '';
-    for (let i = 0; i < 5; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return '#SQX-' + code;
-  }
-
-  // Form Submission handling via AJAX for Web3Forms
-  const contactForm = document.getElementById('contactForm');
-  const formSuccess = document.getElementById('form-success');
-  const formError = document.getElementById('form-error');
-
-  contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const orderRef = generateOrderRef();
-    document.getElementById('orderRefInput').value = orderRef;
-
-    const formData = new FormData(contactForm);
-
-    fetch(contactForm.action, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Accept': 'application/json'
-      }
-    }).then(response => {
-      if (response.ok) {
-        contactForm.reset();
-        document.getElementById('otherCategoryField').style.display = 'none';
-        contactForm.querySelectorAll('.field, .tos-box, .checkbox-field, button[type="submit"]').forEach(el => el.style.display = 'none');
-        document.getElementById('orderNumberDisplay').textContent = orderRef;
-        formSuccess.style.display = 'block';
-        formError.style.display = 'none';
-      } else {
-        formError.style.display = 'block';
-      }
-    }).catch(error => {
-      formError.style.display = 'block';
-    });
-  });
-
-  // Video Lightbox Modal Controls
-  const videoModal = document.getElementById('videoModal');
-  const videoModalBody = document.getElementById('videoModalBody');
-
+  // Dynamic Video Lightbox Modal Functions
   function openVideoModal(card) {
-    const type = card.getAttribute('data-video-type');
-    const src = card.getAttribute('data-video-src');
-    videoModalBody.innerHTML = '';
+    const videoType = card.getAttribute('data-video-type');
+    const videoSrc = card.getAttribute('data-video-src');
+    const modal = document.getElementById('videoModal');
+    const modalBody = document.getElementById('videoModalBody');
 
-    if (type === 'embed') {
+    modalBody.innerHTML = '';
+
+    if (videoType === 'embed') {
       const iframe = document.createElement('iframe');
-      iframe.src = src;
+      iframe.src = videoSrc;
       iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       iframe.allowFullscreen = true;
-      videoModalBody.appendChild(iframe);
-    } else if (type === 'mp4') {
+      modalBody.appendChild(iframe);
+    } else if (videoType === 'mp4') {
       const video = document.createElement('video');
-      video.src = src;
+      video.src = videoSrc;
       video.controls = true;
       video.autoplay = true;
-      videoModalBody.appendChild(video);
+      modalBody.appendChild(video);
     }
 
-    videoModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    modal.classList.add('active');
   }
 
   function closeVideoModal() {
-    videoModal.classList.remove('active');
-    videoModalBody.innerHTML = '';
-    document.body.style.overflow = '';
+    const modal = document.getElementById('videoModal');
+    const modalBody = document.getElementById('videoModalBody');
+    modal.classList.remove('active');
+    modalBody.innerHTML = '';
   }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && videoModal.classList.contains('active')) {
-      closeVideoModal();
-    }
-  });
 </script>
+
 </body>
 </html>

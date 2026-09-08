@@ -53,13 +53,57 @@
   .eyebrow::before{content:"";width:22px;height:1px;background:var(--signal);display:inline-block;}
 
   .container{max-width:1180px; margin:0 auto; padding:0 24px;}
-  section{padding:130px 0;}
+  section{padding:130px 0; position:relative;}
   .section-head{max-width:640px; margin-bottom:64px;}
   .section-head h2{font-size:clamp(1.9rem,3.6vw,2.7rem); margin-bottom:16px;}
   .section-head p{color:var(--muted); font-size:1.05rem; max-width:520px;}
 
   .cut{ clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%); }
   .cut-sm{ clip-path: polygon(0 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%); }
+
+  /* Ambient Scroll Graphic Overlay Elements */
+  .scroll-graphic-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 900;
+    overflow: hidden;
+  }
+  .scroll-crosshair {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-top: 1px solid rgba(0,0,0,0.25);
+    border-left: 1px solid rgba(0,0,0,0.25);
+    transition: transform 0.1s linear;
+  }
+  .scroll-crosshair-1 { top: 12%; left: 3%; }
+  .scroll-crosshair-2 { top: 65%; right: 4%; border-top:none; border-bottom: 1px solid rgba(0,0,0,0.25); border-left:none; border-right: 1px solid rgba(0,0,0,0.25); }
+
+  .scroll-counter-hud {
+    position: absolute;
+    bottom: 20px;
+    right: 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--paper);
+    background: rgba(255,255,255,0.85);
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Text Reveal Kinetic Motion Class */
+  .reveal-text {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(24px) rotate(1.5deg);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-text.visible {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
 
   /* Scrubber */
   .scrubber{position:fixed; top:0; left:0; right:0; height:4px; background:rgba(0,0,0,0.08); z-index:1200;}
@@ -164,7 +208,6 @@
     100% { transform: scaleY(0.75); opacity: 0.8; }
   }
 
-  /* Neighbor Proximity Scaling Overrides */
   .waveform span.hover-direct {
     background: #FFFFFF !important;
     opacity: 1 !important;
@@ -196,7 +239,7 @@
   /* Services */
   #services{background:var(--panel);}
   .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  .svc-card{background:var(--panel-2); padding:32px 26px; transition:transform .25s ease;}
+  .svc-card{background:var(--panel-2); padding:32px 26px; transition:transform .25s ease, opacity 0.4s ease;}
   .svc-card:hover{transform:translateY(-4px);}
   .svc-icon{width:46px; height:46px; background:var(--signal); display:flex; align-items:center; justify-content:center; margin-bottom:22px;}
   .svc-icon svg{width:22px; height:22px; stroke:#FFFFFF; fill:none; stroke-width:1.5;}
@@ -289,6 +332,79 @@
     font-size: 0.7rem;
   }
 
+  /* FEATURE SURPRISE: Dynamic Multi-Track Motion Keyframe Studio */
+  #keyframeStudio {
+    background: #000000;
+    color: #FFFFFF;
+    border-top: 1px solid var(--signal-dim);
+    border-bottom: 1px solid var(--signal-dim);
+  }
+  .studio-box {
+    background: #0D0D0D;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 24px;
+  }
+  .studio-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .studio-tracks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .track-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    gap: 16px;
+    background: #141414;
+    padding: 10px 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .track-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--steel);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .track-timeline {
+    position: relative;
+    height: 28px;
+    background: #080808;
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+  .keyframe-node {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 10px;
+    height: 10px;
+    background: #FFFFFF;
+    border: 1px solid #000;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .keyframe-node:hover {
+    background: var(--steel);
+    transform: translate(-50%, -50%) rotate(45deg) scale(1.3);
+  }
+  .track-block {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-left: 2px solid #FFFFFF;
+    border-right: 2px solid #FFFFFF;
+  }
+
   /* Dynamic Video Lightbox Modal */
   .video-modal {
     display: none;
@@ -362,7 +478,7 @@
 
   /* Process */
   .process-list{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
-  .process-step{border-top:1px solid var(--line); padding-top:22px;}
+  .process-step{border-top:1px solid var(--line); padding-top:22px; transition: transform 0.3s ease, opacity 0.3s ease;}
   .process-step .step-num{font-family:'IBM Plex Mono',monospace; color:var(--signal); font-size:0.85rem; margin-bottom:14px; display:block;}
   .process-step h4{font-size:1.05rem; margin-bottom:10px;}
   .process-step p{color:var(--muted); font-size:0.9rem; line-height:1.6;}
@@ -426,6 +542,13 @@
 </head>
 <body>
 
+<!-- Ambient Motion Graphics Layer Driven by Scroll Position -->
+<div class="scroll-graphic-layer">
+  <div class="scroll-crosshair scroll-crosshair-1" id="crosshair1"></div>
+  <div class="scroll-crosshair scroll-crosshair-2" id="crosshair2"></div>
+  <div class="scroll-counter-hud" id="hudScrollPos">POS_Y: 0000PX // MOTION_DELTA: 0.00</div>
+</div>
+
 <div class="scrubber"><div class="scrubber-ticks"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="scrubber-fill" id="scrubberFill"></div></div>
 
 <header id="siteHeader">
@@ -435,6 +558,7 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#services">Services</a></li>
         <li><a href="#work">Work</a></li>
+        <li><a href="#studio">Timeline Studio</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -450,7 +574,7 @@
   <div class="letterbox"></div>
   <div class="container hero-inner">
     <div class="hero-eyebrow"><span class="dot"></span> 00:00:00:00 · MOTION GRAPHICS &amp; POST-PRODUCTION</div>
-    <h1>Turning footage into stories that <em>land.</em></h1>
+    <h1>Turning footage into stories that <em class="reveal-text">land.</em></h1>
     <p class="lede">SequencedFx creates motion graphics and edits video for brands, businesses, and creators — animated content, social edits, and commercial work, crafted with pace, clarity, and a professional finish.</p>
     <div class="btn-row">
       <a href="#contact" class="btn btn-primary cut">Start a Project</a>
@@ -489,7 +613,7 @@
   <div class="container">
     <div class="section-head">
       <div class="eyebrow">01:12 · Services</div>
-      <h2>What we create</h2>
+      <h2 class="reveal-text">What we create</h2>
       <p>Have a style in mind? Share a reference clip or link and we'll match its pacing, tone, and visual feel as closely as we can — that approach carries across every service below.</p>
     </div>
     <div class="grid-3">
@@ -531,7 +655,7 @@
   <div class="container">
     <div class="section-head">
       <div class="eyebrow">02:47 · Selected Work</div>
-      <h2>Recent edits</h2>
+      <h2 class="reveal-text">Recent edits</h2>
       <p>Explore some of our recent motion graphics and edit showcases.</p>
     </div>
     <div class="work-grid">
@@ -587,6 +711,49 @@
   </div>
 </section>
 
+<!-- SURPRISE ADDITION: Multi-Track Timeline Keyframe Studio -->
+<section id="keyframeStudio">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">03:30 · Interactive Workflow</div>
+      <h2 class="reveal-text">Multi-Track Keyframe Studio</h2>
+      <p>An interactive non-linear editing timeline preview showing live keyframe interpolation and layer stacking.</p>
+    </div>
+    <div class="studio-box cut-sm">
+      <div class="studio-head mono">
+        <span>TIMELINE_TRACK_STACK // 24.0 FPS</span>
+        <span id="studioPlayheadPos">PLAYHEAD: 00:00:02:14</span>
+      </div>
+      <div class="studio-tracks">
+        <div class="track-row">
+          <div class="track-label"><span>[V3]</span> TITLES_MGX</div>
+          <div class="track-timeline">
+            <div class="track-block" style="left: 10%; width: 35%;"></div>
+            <div class="keyframe-node" style="left: 10%;"></div>
+            <div class="keyframe-node" style="left: 45%;"></div>
+          </div>
+        </div>
+        <div class="track-row">
+          <div class="track-label"><span>[V2]</span> FOOTAGE_MAIN</div>
+          <div class="track-timeline">
+            <div class="track-block" style="left: 0%; width: 85%;"></div>
+            <div class="keyframe-node" style="left: 20%;"></div>
+            <div class="keyframe-node" style="left: 60%;"></div>
+          </div>
+        </div>
+        <div class="track-row">
+          <div class="track-label"><span>[A1]</span> AUDIO_MASTER</div>
+          <div class="track-timeline">
+            <div class="track-block" style="left: 0%; width: 100%; background: rgba(255,255,255,0.08);"></div>
+            <div class="keyframe-node" style="left: 5%;"></div>
+            <div class="keyframe-node" style="left: 95%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Video Modal -->
 <div class="video-modal" id="videoModal">
   <div class="video-modal-overlay" onclick="closeVideoModal()"></div>
@@ -604,7 +771,7 @@
       </div>
       <div class="about-copy">
         <div class="eyebrow">04:03 · About</div>
-        <h2 style="margin-bottom:20px;">Hi, I'm the editor behind SequencedFx.</h2>
+        <h2 style="margin-bottom:20px;" class="reveal-text">Hi, I'm the editor behind SequencedFx.</h2>
         <p><strong>I'm a motion graphics artist and video editor with 3 years of experience</strong> helping brands, businesses, and creators turn raw footage into polished, compelling stories.</p>
         <p>From animated titles to corporate videos to social content, I bring a sharp eye for pacing, color, and motion to every project — combined with clear communication and reliable turnaround times.</p>
         <div class="tag-row">
@@ -622,7 +789,7 @@
   <div class="container">
     <div class="section-head">
       <div class="eyebrow">05:20 · How We Work</div>
-      <h2>A clear, simple process</h2>
+      <h2 class="reveal-text">A clear, simple process</h2>
     </div>
     <div class="process-list">
       <div class="process-step"><span class="step-num mono">STEP 01</span><h4>Discovery Call</h4><p>We talk through your project, goals, and footage so I understand exactly what you need.</p></div>
@@ -637,7 +804,7 @@
   <div class="container">
     <div class="section-head">
       <div class="eyebrow">06:38 · Client Words</div>
-      <h2>What clients say</h2>
+      <h2 class="reveal-text">What clients say</h2>
     </div>
     <div class="testi-grid">
       <div class="testi-card"><span class="qmark">"</span><p>SequencedFx brought our brand video to life exactly as we envisioned — maybe even better. Fast turnaround and great communication throughout.</p><div class="testi-who">CLIENT NAME — COMPANY</div></div>
@@ -652,7 +819,7 @@
     <div class="contact-grid">
       <div class="contact-info">
         <div class="eyebrow">07:55 · Start a Project</div>
-        <h2 style="margin-bottom:18px;">Let's cut something great.</h2>
+        <h2 style="margin-bottom:18px;" class="reveal-text">Let's cut something great.</h2>
         <p>Tell me about your project and I'll get back to you within one business day.</p>
         <div class="info-line"><span class="k">Email</span><a class="v" href="mailto:sequencedfx@gmail.com">sequencedfx@gmail.com</a></div>
         
@@ -736,12 +903,61 @@
 </footer>
 
 <script>
+  // Continuous Scroll-Driven Motion Engine & HUD Tracker
+  const crosshair1 = document.getElementById('crosshair1');
+  const crosshair2 = document.getElementById('crosshair2');
+  const hudScrollPos = document.getElementById('hudScrollPos');
+  const scrubberFill = document.getElementById('scrubberFill');
+  const siteHeader = document.getElementById('siteHeader');
+
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const currentY = window.scrollY;
+    const delta = (currentY - lastScrollY);
+    lastScrollY = currentY;
+
+    // Move overlays based on scroll delta
+    if (crosshair1) crosshair1.style.transform = `translateY(${currentY * 0.15}px) rotate(${currentY * 0.05}deg)`;
+    if (crosshair2) crosshair2.style.transform = `translateY(${-currentY * 0.1}px) rotate(${-currentY * 0.05}deg)`;
+
+    if (hudScrollPos) {
+      hudScrollPos.innerText = `POS_Y: ${String(Math.floor(currentY)).padStart(4, '0')}PX // MOTION_DELTA: ${delta.toFixed(2)}`;
+    }
+
+    if (currentY > 40) {
+      siteHeader.classList.add('scrolled');
+    } else {
+      siteHeader.classList.remove('scrolled');
+    }
+
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (totalHeight > 0) {
+      const progress = (currentY / totalHeight) * 100;
+      scrubberFill.style.width = `${progress}%`;
+    }
+  });
+
+  // Intersection Observer for Kinetic Text & Card Reveals
+  const observerOptions = { threshold: 0.15 };
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal-text, .svc-card, .process-step').forEach(el => {
+    revealObserver.observe(el);
+  });
+
   // Waveform Bar Dynamic Generation & Proximity Hover Engine
   const waveformEl = document.getElementById('waveform');
 
   if (waveformEl) {
     const totalBars = 52;
-    waveformEl.innerHTML = ''; // Clear prior nodes
+    waveformEl.innerHTML = '';
     
     for (let i = 0; i < totalBars; i++) {
       const span = document.createElement('span');
@@ -826,23 +1042,6 @@
       lutBadge.innerText = 'PROFILE: RECT_DEFAULT';
     });
   }
-
-  // Header Scroll & Scrubber Effect
-  const siteHeader = document.getElementById('siteHeader');
-  const scrubberFill = document.getElementById('scrubberFill');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      siteHeader.classList.add('scrolled');
-    } else {
-      siteHeader.classList.remove('scrolled');
-    }
-
-    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (totalHeight > 0) {
-      const progress = (window.scrollY / totalHeight) * 100;
-      scrubberFill.style.width = `${progress}%`;
-    }
-  });
 
   // Navigation Mobile Menu Toggle
   const menuToggle = document.getElementById('menuToggle');

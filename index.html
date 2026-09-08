@@ -65,7 +65,7 @@
   .scrubber{position:fixed; top:0; left:0; right:0; height:4px; background:rgba(0,0,0,0.08); z-index:1200;}
   .scrubber-fill{height:100%; width:0%; background:var(--signal); position:relative; transition:width 0.05s linear;}
   .scrubber-fill::after{content:""; position:absolute; right:-5px; top:-4px; width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid var(--signal);}
-  .scrubber-ticks{position:absolute; inset:0; display:flex; justify-content:space-between; padding:0 2px;}
+  .scrubber-ticks{position:absolute; inset:0; display:flex; justify-space-between; padding:0 2px;}
   .scrubber-ticks span{width:1px; height:100%; background:rgba(0,0,0,0.16);}
 
   /* Nav */
@@ -137,8 +137,8 @@
   }
   .waveform-wrapper {
     position: relative;
-    height: 48px;
-    cursor: pointer;
+    height: 64px;
+    cursor: crosshair;
     overflow: hidden;
   }
   .waveform {
@@ -153,16 +153,30 @@
     min-width: 2px;
     transform-origin: bottom;
     opacity: 0.4;
-    transition: background 0.15s, opacity 0.15s;
+    animation: waveLoop 1.2s ease-in-out infinite alternate;
+    transition: background 0.15s, opacity 0.15s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  .waveform.active span {
-    animation: wavePulse 1.2s ease-in-out infinite;
+  @keyframes waveLoop {
+    0% { transform: scaleY(0.3); opacity: 0.3; }
+    100% { transform: scaleY(0.85); opacity: 0.8; }
   }
-  .waveform span.active-bar {
-    background: #FFFFFF;
-    opacity: 1;
+
+  /* Neighbor proximity levels */
+  .waveform span.hover-direct {
+    background: #FFFFFF !important;
+    opacity: 1 !important;
+    transform: scaleY(1.4) !important;
   }
-  @keyframes wavePulse{0%,100%{transform:scaleY(0.4); opacity:0.35;} 50%{transform:scaleY(1); opacity:0.9;}}
+  .waveform span.hover-near {
+    background: #E0E0E0 !important;
+    opacity: 0.9 !important;
+    transform: scaleY(1.2) !important;
+  }
+  .waveform span.hover-far {
+    background: #AFAFAF !important;
+    opacity: 0.7 !important;
+    transform: scaleY(1.05) !important;
+  }
 
   .deck-controls {
     display: flex;
@@ -173,16 +187,6 @@
     border-top: 1px solid rgba(255,255,255,0.15);
     font-size: 0.75rem;
   }
-  .deck-btn {
-    background: #FFFFFF;
-    color: #000000;
-    border: none;
-    padding: 6px 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .deck-btn:hover { background: var(--steel); }
 
   @media (max-width:760px){ .clip-row{grid-template-columns:repeat(2,1fr);} .playhead{display:none;} }
 
@@ -221,7 +225,7 @@
   .work-card:hover .work-info h4 { transform: translateX(4px); }
   .work-info span{font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:#FFFFFF; letter-spacing:0.06em; text-transform:uppercase;}
 
-  /* Interactive Viewport Inspector Graphic */
+  /* Interactive Color Matrix / Grade Inspector */
   .inspector-box {
     margin-top: 48px;
     background: #000000;
@@ -236,39 +240,36 @@
     background: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 20px),
                 repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 20px);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     cursor: crosshair;
+    transition: filter 0.2s ease;
   }
   .inspector-reticle {
     position: absolute;
     width: 36px;
     height: 36px;
-    border: 1px solid rgba(255,255,255,0.6);
+    border: 1px dashed rgba(255,255,255,0.8);
     border-radius: 50%;
     pointer-events: none;
     transform: translate(-50%, -50%);
-    transition: width 0.15s, height 0.15s;
+    transition: border-color 0.2s;
   }
-  .glitch-title {
+  .inspector-title {
     font-family: 'Archivo', sans-serif;
     font-weight: 900;
     font-size: 2.2rem;
     letter-spacing: -0.02em;
     user-select: none;
-    position: relative;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
   }
-  .glitch-title.active {
-    animation: glitchAnim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  }
-  @keyframes glitchAnim {
-    0% { transform: translate(0); }
-    20% { transform: translate(-3px, 3px); text-shadow: 2px 0 #FF0055, -2px 0 #00E5FF; }
-    40% { transform: translate(-3px, -3px); text-shadow: -2px 0 #FF0055, 2px 0 #00E5FF; }
-    60% { transform: translate(3px, 3px); text-shadow: 2px 0 #FF0055, -2px 0 #00E5FF; }
-    80% { transform: translate(3px, -3px); text-shadow: -2px 0 #FF0055, 2px 0 #00E5FF; }
-    100% { transform: translate(0); text-shadow: none; }
+  .inspector-sub {
+    font-size: 0.72rem;
+    color: var(--steel);
+    letter-spacing: 0.15em;
+    margin-top: 4px;
   }
 
   .inspector-bar {
@@ -277,6 +278,12 @@
     align-items: center;
     margin-top: 14px;
     font-size: 0.75rem;
+  }
+  .lut-badge {
+    background: #222222;
+    border: 1px solid var(--signal-dim);
+    padding: 4px 10px;
+    font-size: 0.7rem;
   }
 
   /* Dynamic Video Lightbox Modal */
@@ -386,8 +393,6 @@
   .field textarea{resize:vertical; min-height:90px;}
   .field select option{background:var(--ink);}
 
-  .conditional-field{display:none;}
-
   /* TOS Box & Checkbox */
   .tos-box{border:1px solid var(--line); padding:16px; background:var(--panel-2); font-size:0.85rem; color:var(--muted); line-height:1.5; max-height:140px; overflow-y:auto; margin-bottom:16px;}
   .tos-box strong{color:var(--paper);}
@@ -461,14 +466,14 @@
       <!-- Interactive Audio Waveform Deck -->
       <div class="interactive-deck cut-sm">
         <div class="deck-header mono">
-          <span>INTERACTIVE_AUDIO_ENGINE // REACTIVE</span>
-          <span id="deckStatus">STATUS: READY</span>
+          <span>INTERACTIVE_AUDIO_ENGINE // ACTIVE_LOOP</span>
+          <span id="deckStatus">STATUS: RUNNING [60.0 FPS]</span>
         </div>
         <div class="waveform-wrapper" id="waveformWrapper">
           <div class="waveform" id="waveform"></div>
         </div>
         <div class="deck-controls mono">
-          <button class="deck-btn cut-sm" id="toggleAudioBtn">▶ TOGGLE PLAYBACK</button>
+          <span>FREQ_RESPONSE: REALTIME</span>
           <span id="timecodeDisplay">TC 00:00:14:22</span>
         </div>
       </div>
@@ -527,14 +532,12 @@
       <p>Explore some of our recent motion graphics and edit showcases.</p>
     </div>
     <div class="work-grid">
-      <!-- Watermark Card 1 -->
       <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/GPkeaG8C6Bw?autoplay=1" onclick="openVideoModal(this)">
         <div class="thumb" style="background-image: url('https://i.ytimg.com/vi/GPkeaG8C6Bw/maxresdefault.jpg');"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
         <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
         <div class="work-info"><h4>Custom Watermark 01</h4><span>Motion Graphics</span></div>
       </div>
 
-      <!-- Watermark Card 2 -->
       <div class="work-card cut-sm" data-video-type="embed" data-video-src="https://www.youtube.com/embed/M8HSw9Glgjs?autoplay=1" onclick="openVideoModal(this)">
         <div class="thumb" style="background-image: url('https://i.ytimg.com/vi/M8HSw9Glgjs/maxresdefault.jpg');"></div><span class="mark mark-tl"></span><span class="mark mark-br"></span>
         <div class="play-mark"><svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg></div>
@@ -566,15 +569,16 @@
       </div>
     </div>
 
-    <!-- Interactive Inspector Box Graphic -->
+    <!-- Interactive Color Matrix Inspector Graphic -->
     <div class="inspector-box cut-sm">
       <div class="inspector-viewport" id="inspectorViewport">
         <div class="inspector-reticle" id="inspectorReticle"></div>
-        <span class="glitch-title" id="glitchTitle">SEQUENCED_FX</span>
+        <span class="inspector-title" id="inspectorTitle">SEQUENCED_FX</span>
+        <span class="inspector-sub mono">LIVE COLOR GRADE INSPECTOR</span>
       </div>
       <div class="inspector-bar mono">
-        <span>INTERACTIVE_INSPECTOR // HOVER &amp; CLICK TO GLITCH</span>
-        <span id="coordsDisplay">X: 00 Y: 00</span>
+        <span>MOVE CURSOR TO ADJUST COLOR PROFILE MATRIX</span>
+        <span class="lut-badge" id="lutBadge">PROFILE: RECT_DEFAULT</span>
       </div>
     </div>
   </div>
@@ -729,35 +733,40 @@
 </footer>
 
 <script>
-  // Waveform Bar Generator & Interactive Control
+  // Waveform Bar Loop & Group Proximity Hover
   const waveformEl = document.getElementById('waveform');
-  const toggleAudioBtn = document.getElementById('toggleAudioBtn');
-  const deckStatus = document.getElementById('deckStatus');
-  let isWaveformActive = false;
 
   if (waveformEl) {
-    for (let i = 0; i < 52; i++) {
+    const totalBars = 52;
+    for (let i = 0; i < totalBars; i++) {
       const span = document.createElement('span');
       span.style.animationDelay = `${(Math.random() * 1.5).toFixed(2)}s`;
-      span.style.height = `${Math.floor(Math.random() * 70) + 30}%`;
       waveformEl.appendChild(span);
     }
 
-    waveformEl.addEventListener('click', (e) => {
-      const bars = waveformEl.querySelectorAll('span');
-      bars.forEach(bar => bar.classList.remove('active-bar'));
-      if (e.target.tagName === 'SPAN') {
-        e.target.classList.add('active-bar');
-      }
-    });
-  }
+    const bars = waveformEl.querySelectorAll('span');
 
-  if (toggleAudioBtn) {
-    toggleAudioBtn.addEventListener('click', () => {
-      isWaveformActive = !isWaveformActive;
-      waveformEl.classList.toggle('active', isWaveformActive);
-      toggleAudioBtn.innerText = isWaveformActive ? '❚❚ PAUSE PLAYBACK' : '▶ TOGGLE PLAYBACK';
-      deckStatus.innerText = isWaveformActive ? 'STATUS: PLAYING [60.0 FPS]' : 'STATUS: READY';
+    waveformEl.addEventListener('mousemove', (e) => {
+      const rect = waveformEl.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const barWidth = rect.width / totalBars;
+      const hoveredIndex = Math.floor(mouseX / barWidth);
+
+      bars.forEach((bar, idx) => {
+        bar.classList.remove('hover-direct', 'hover-near', 'hover-far');
+        const diff = Math.abs(idx - hoveredIndex);
+        if (diff === 0) {
+          bar.classList.add('hover-direct');
+        } else if (diff === 1) {
+          bar.classList.add('hover-near');
+        } else if (diff === 2) {
+          bar.classList.add('hover-far');
+        }
+      });
+    });
+
+    waveformEl.addEventListener('mouseleave', () => {
+      bars.forEach(bar => bar.classList.remove('hover-direct', 'hover-near', 'hover-far'));
     });
   }
 
@@ -773,27 +782,41 @@
     if (timecodeDisplay) timecodeDisplay.innerText = `TC ${hrs}:${mins}:${secs}:${f}`;
   }, 1000 / 24);
 
-  // Inspector Viewport Tracking & Glitch Effect
+  // Dynamic Interactive Color Matrix Inspector
   const inspectorViewport = document.getElementById('inspectorViewport');
   const inspectorReticle = document.getElementById('inspectorReticle');
-  const coordsDisplay = document.getElementById('coordsDisplay');
-  const glitchTitle = document.getElementById('glitchTitle');
+  const inspectorTitle = document.getElementById('inspectorTitle');
+  const lutBadge = document.getElementById('lutBadge');
 
   if (inspectorViewport && inspectorReticle) {
     inspectorViewport.addEventListener('mousemove', (e) => {
       const rect = inspectorViewport.getBoundingClientRect();
-      const x = Math.floor(e.clientX - rect.left);
-      const y = Math.floor(e.clientY - rect.top);
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const normX = x / rect.width;
+      const normY = y / rect.height;
+
       inspectorReticle.style.left = `${x}px`;
       inspectorReticle.style.top = `${y}px`;
-      if (coordsDisplay) coordsDisplay.innerText = `X: ${String(x).padStart(3, '0')} Y: ${String(y).padStart(3, '0')}`;
+
+      // Dynamic color grading calculations
+      const hue = Math.floor(normX * 360);
+      const sat = Math.floor(normY * 100);
+      const lum = Math.floor(100 - (normY * 30));
+
+      inspectorTitle.style.color = `hsl(${hue}, ${sat}%, ${lum}%)`;
+      inspectorTitle.style.textShadow = `0 0 20px hsla(${hue}, ${sat}%, 50%, 0.5)`;
+      
+      const r = Math.floor(normX * 255);
+      const g = Math.floor(normY * 255);
+      const b = Math.floor((1 - normX) * 255);
+      lutBadge.innerText = `LUT_GRADE // RGB(${r}, ${g}, ${b})`;
     });
 
-    inspectorViewport.addEventListener('click', () => {
-      if (glitchTitle) {
-        glitchTitle.classList.add('active');
-        setTimeout(() => glitchTitle.classList.remove('active'), 300);
-      }
+    inspectorViewport.addEventListener('mouseleave', () => {
+      inspectorTitle.style.color = '#FFFFFF';
+      inspectorTitle.style.textShadow = 'none';
+      lutBadge.innerText = 'PROFILE: RECT_DEFAULT';
     });
   }
 

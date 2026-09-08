@@ -332,77 +332,78 @@
     font-size: 0.7rem;
   }
 
-  /* FEATURE SURPRISE: Dynamic Multi-Track Motion Keyframe Studio */
-  #keyframeStudio {
+  /* NEW REPLACEMENT: 3D Spatial Parallax Camera Rig Inspector */
+  #spatialRig {
     background: #000000;
     color: #FFFFFF;
     border-top: 1px solid var(--signal-dim);
     border-bottom: 1px solid var(--signal-dim);
   }
-  .studio-box {
-    background: #0D0D0D;
+  .spatial-box {
+    background: #090909;
     border: 1px solid rgba(255,255,255,0.15);
-    padding: 24px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
   }
-  .studio-head {
+  .spatial-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     padding-bottom: 14px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
   }
-  .studio-tracks {
+  .spatial-viewport {
+    position: relative;
+    height: 280px;
+    background: radial-gradient(circle at center, #151515 0%, #050505 100%);
+    perspective: 800px;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .track-row {
-    display: grid;
-    grid-template-columns: 140px 1fr;
     align-items: center;
-    gap: 16px;
-    background: #141414;
-    padding: 10px 14px;
-    border: 1px solid rgba(255,255,255,0.06);
+    justify-content: center;
+    cursor: grab;
+    overflow: hidden;
   }
-  .track-label {
+  .spatial-stage {
+    position: relative;
+    width: 220px;
+    height: 140px;
+    transform-style: preserve-3d;
+    transition: transform 0.08s ease-out;
+  }
+  .spatial-layer {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    backdrop-filter: blur(2px);
+  }
+  .layer-bg { transform: translateZ(-80px); background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.15); }
+  .layer-mid { transform: translateZ(0px); background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.35); }
+  .layer-fg { transform: translateZ(80px); background: rgba(255,255,255,0.16); border-color: #FFFFFF; font-weight: 600; }
+
+  .spatial-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .rig-stat-item {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
     color: var(--steel);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .track-timeline {
-    position: relative;
-    height: 28px;
-    background: #080808;
+    background: #111111;
+    padding: 8px 12px;
     border: 1px solid rgba(255,255,255,0.08);
-    overflow: hidden;
-  }
-  .keyframe-node {
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%) rotate(45deg);
-    width: 10px;
-    height: 10px;
-    background: #FFFFFF;
-    border: 1px solid #000;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .keyframe-node:hover {
-    background: var(--steel);
-    transform: translate(-50%, -50%) rotate(45deg) scale(1.3);
-  }
-  .track-block {
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    background: rgba(255, 255, 255, 0.15);
-    border-left: 2px solid #FFFFFF;
-    border-right: 2px solid #FFFFFF;
   }
 
   /* Dynamic Video Lightbox Modal */
@@ -528,7 +529,7 @@
 
   #form-error{display:none; margin-top:18px; padding:14px 16px; background:rgba(0,0,0,0.04); border:1px solid var(--signal-dim); font-size:0.9rem;}
 
-  @media (max-width:860px){ .contact-grid{grid-template-columns:1fr; gap:44px;} }
+  @media (max-width:860px){ .contact-grid{grid-template-columns:1fr; gap:44px;} .spatial-controls{grid-template-columns:1fr;} }
 
   /* Footer */
   footer{border-top:1px solid var(--line); padding:44px 0;}
@@ -558,7 +559,7 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#services">Services</a></li>
         <li><a href="#work">Work</a></li>
-        <li><a href="#studio">Timeline Studio</a></li>
+        <li><a href="#spatialRig">3D Camera Rig</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -711,44 +712,30 @@
   </div>
 </section>
 
-<!-- SURPRISE ADDITION: Multi-Track Timeline Keyframe Studio -->
-<section id="keyframeStudio">
+<!-- REPLACEMENT SECTION: 3D Spatial Parallax Camera Rig Inspector -->
+<section id="spatialRig">
   <div class="container">
     <div class="section-head">
-      <div class="eyebrow">03:30 · Interactive Workflow</div>
-      <h2 class="reveal-text">Multi-Track Keyframe Studio</h2>
-      <p>An interactive non-linear editing timeline preview showing live keyframe interpolation and layer stacking.</p>
+      <div class="eyebrow">03:30 · 3D Motion Mechanics</div>
+      <h2 class="reveal-text">Spatial Depth &amp; Camera Rig</h2>
+      <p>Interactive demonstration of multi-plane parallax camera movement and focal plane alignment used in advanced composite motion graphics.</p>
     </div>
-    <div class="studio-box cut-sm">
-      <div class="studio-head mono">
-        <span>TIMELINE_TRACK_STACK // 24.0 FPS</span>
-        <span id="studioPlayheadPos">PLAYHEAD: 00:00:02:14</span>
+    <div class="spatial-box cut-sm">
+      <div class="spatial-head mono">
+        <span>3D_RIG_TRANSFORM // REALTIME_PARALLAX</span>
+        <span id="rigStateText">CAMERA_ROT: PITCH 0.0° / YAW 0.0°</span>
       </div>
-      <div class="studio-tracks">
-        <div class="track-row">
-          <div class="track-label"><span>[V3]</span> TITLES_MGX</div>
-          <div class="track-timeline">
-            <div class="track-block" style="left: 10%; width: 35%;"></div>
-            <div class="keyframe-node" style="left: 10%;"></div>
-            <div class="keyframe-node" style="left: 45%;"></div>
-          </div>
+      <div class="spatial-viewport" id="spatialViewport">
+        <div class="spatial-stage" id="spatialStage">
+          <div class="spatial-layer layer-bg">BG_DEPTH [-80px]</div>
+          <div class="spatial-layer layer-mid">MID_GRAPHICS [0px]</div>
+          <div class="spatial-layer layer-fg">FOREGROUND [+80px]</div>
         </div>
-        <div class="track-row">
-          <div class="track-label"><span>[V2]</span> FOOTAGE_MAIN</div>
-          <div class="track-timeline">
-            <div class="track-block" style="left: 0%; width: 85%;"></div>
-            <div class="keyframe-node" style="left: 20%;"></div>
-            <div class="keyframe-node" style="left: 60%;"></div>
-          </div>
-        </div>
-        <div class="track-row">
-          <div class="track-label"><span>[A1]</span> AUDIO_MASTER</div>
-          <div class="track-timeline">
-            <div class="track-block" style="left: 0%; width: 100%; background: rgba(255,255,255,0.08);"></div>
-            <div class="keyframe-node" style="left: 5%;"></div>
-            <div class="keyframe-node" style="left: 95%;"></div>
-          </div>
-        </div>
+      </div>
+      <div class="spatial-controls">
+        <div class="rig-stat-item" id="camXStat">CAM_POS_X: 00.00px</div>
+        <div class="rig-stat-item" id="camYStat">CAM_POS_Y: 00.00px</div>
+        <div class="rig-stat-item" id="camFovStat">FOV_LENS: 50mm Prime</div>
       </div>
     </div>
   </div>
@@ -917,7 +904,6 @@
     const delta = (currentY - lastScrollY);
     lastScrollY = currentY;
 
-    // Move overlays based on scroll delta
     if (crosshair1) crosshair1.style.transform = `translateY(${currentY * 0.15}px) rotate(${currentY * 0.05}deg)`;
     if (crosshair2) crosshair2.style.transform = `translateY(${-currentY * 0.1}px) rotate(${-currentY * 0.05}deg)`;
 
@@ -1040,6 +1026,37 @@
       inspectorTitle.style.color = '#FFFFFF';
       inspectorTitle.style.textShadow = 'none';
       lutBadge.innerText = 'PROFILE: RECT_DEFAULT';
+    });
+  }
+
+  // 3D Parallax Camera Rig Interactivity Engine
+  const spatialViewport = document.getElementById('spatialViewport');
+  const spatialStage = document.getElementById('spatialStage');
+  const rigStateText = document.getElementById('rigStateText');
+  const camXStat = document.getElementById('camXStat');
+  const camYStat = document.getElementById('camYStat');
+
+  if (spatialViewport && spatialStage) {
+    spatialViewport.addEventListener('mousemove', (e) => {
+      const rect = spatialViewport.getBoundingClientRect();
+      const x = e.clientX - rect.left - (rect.width / 2);
+      const y = e.clientY - rect.top - (rect.height / 2);
+
+      const rotateY = (x / (rect.width / 2)) * 30; // pitch & yaw mapping
+      const rotateX = -(y / (rect.height / 2)) * 25;
+
+      spatialStage.style.transform = `rotateX(${rotateX.toFixed(1)}deg) rotateY(${rotateY.toFixed(1)}deg)`;
+
+      if (rigStateText) rigStateText.innerText = `CAMERA_ROT: PITCH ${rotateX.toFixed(1)}° / YAW ${rotateY.toFixed(1)}°`;
+      if (camXStat) camXStat.innerText = `CAM_POS_X: ${x.toFixed(2)}px`;
+      if (camYStat) camYStat.innerText = `CAM_POS_Y: ${y.toFixed(2)}px`;
+    });
+
+    spatialViewport.addEventListener('mouseleave', () => {
+      spatialStage.style.transform = `rotateX(0deg) rotateY(0deg)`;
+      if (rigStateText) rigStateText.innerText = `CAMERA_ROT: PITCH 0.0° / YAW 0.0°`;
+      if (camXStat) camXStat.innerText = `CAM_POS_X: 0.00px`;
+      if (camYStat) camYStat.innerText = `CAM_POS_Y: 0.00px`;
     });
   }
 

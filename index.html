@@ -65,7 +65,7 @@
   .scrubber{position:fixed; top:0; left:0; right:0; height:4px; background:rgba(0,0,0,0.08); z-index:1200;}
   .scrubber-fill{height:100%; width:0%; background:var(--signal); position:relative; transition:width 0.05s linear;}
   .scrubber-fill::after{content:""; position:absolute; right:-5px; top:-4px; width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:7px solid var(--signal);}
-  .scrubber-ticks{position:absolute; inset:0; display:flex; justify-space-between; padding:0 2px;}
+  .scrubber-ticks{position:absolute; inset:0; display:flex; justify-content:space-between; padding:0 2px;}
   .scrubber-ticks span{width:1px; height:100%; background:rgba(0,0,0,0.16);}
 
   /* Nav */
@@ -120,7 +120,7 @@
   .clip-block .num{font-family:'Archivo',sans-serif; font-weight:900; font-size:1.9rem; margin-bottom:4px;}
   .clip-block .lbl{font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--muted); letter-spacing:0.06em; text-transform:uppercase;}
   
-  /* Dynamic Interactive Waveform Deck */
+  /* Interactive Waveform Deck */
   .interactive-deck {
     margin-top: 32px;
     background: #000000;
@@ -146,22 +146,25 @@
     align-items: flex-end;
     gap: 3px;
     height: 100%;
+    width: 100%;
   }
   .waveform span {
     flex: 1;
+    height: 100%;
     background: var(--steel);
     min-width: 2px;
     transform-origin: bottom;
     opacity: 0.4;
-    animation: waveLoop 1.2s ease-in-out infinite alternate;
+    animation: waveAnim 1.2s ease-in-out infinite alternate;
     transition: background 0.15s, opacity 0.15s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  @keyframes waveLoop {
-    0% { transform: scaleY(0.3); opacity: 0.3; }
-    100% { transform: scaleY(0.85); opacity: 0.8; }
+
+  @keyframes waveAnim {
+    0% { transform: scaleY(0.2); opacity: 0.3; }
+    100% { transform: scaleY(0.75); opacity: 0.8; }
   }
 
-  /* Neighbor proximity levels */
+  /* Neighbor Proximity Scaling Overrides */
   .waveform span.hover-direct {
     background: #FFFFFF !important;
     opacity: 1 !important;
@@ -170,12 +173,12 @@
   .waveform span.hover-near {
     background: #E0E0E0 !important;
     opacity: 0.9 !important;
-    transform: scaleY(1.2) !important;
+    transform: scaleY(1.18) !important;
   }
   .waveform span.hover-far {
     background: #AFAFAF !important;
-    opacity: 0.7 !important;
-    transform: scaleY(1.05) !important;
+    opacity: 0.75 !important;
+    transform: scaleY(0.98) !important;
   }
 
   .deck-controls {
@@ -733,11 +736,13 @@
 </footer>
 
 <script>
-  // Waveform Bar Loop & Group Proximity Hover
+  // Waveform Bar Dynamic Generation & Proximity Hover Engine
   const waveformEl = document.getElementById('waveform');
 
   if (waveformEl) {
     const totalBars = 52;
+    waveformEl.innerHTML = ''; // Clear prior nodes
+    
     for (let i = 0; i < totalBars; i++) {
       const span = document.createElement('span');
       span.style.animationDelay = `${(Math.random() * 1.5).toFixed(2)}s`;
@@ -750,7 +755,10 @@
       const rect = waveformEl.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
       const barWidth = rect.width / totalBars;
-      const hoveredIndex = Math.floor(mouseX / barWidth);
+      let hoveredIndex = Math.floor(mouseX / barWidth);
+
+      if (hoveredIndex < 0) hoveredIndex = 0;
+      if (hoveredIndex >= totalBars) hoveredIndex = totalBars - 1;
 
       bars.forEach((bar, idx) => {
         bar.classList.remove('hover-direct', 'hover-near', 'hover-far');
@@ -799,7 +807,6 @@
       inspectorReticle.style.left = `${x}px`;
       inspectorReticle.style.top = `${y}px`;
 
-      // Dynamic color grading calculations
       const hue = Math.floor(normX * 360);
       const sat = Math.floor(normY * 100);
       const lum = Math.floor(100 - (normY * 30));

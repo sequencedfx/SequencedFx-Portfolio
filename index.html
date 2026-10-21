@@ -664,47 +664,7 @@
     revealObserver.observe(el);
   });
 
-  // Waveform Bar Dynamic Generation & Proximity Hover Engine
-  const waveformEl = document.getElementById('waveform');
-
-  if (waveformEl) {
-    const totalBars = 52;
-    waveformEl.innerHTML = '';
-    
-    for (let i = 0; i < totalBars; i++) {
-      const span = document.createElement('span');
-      span.style.animationDelay = `${(Math.random() * 1.5).toFixed(2)}s`;
-      waveformEl.appendChild(span);
-    }
-
-    const bars = waveformEl.querySelectorAll('span');
-
-    waveformEl.addEventListener('mousemove', (e) => {
-      const rect = waveformEl.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const barWidth = rect.width / totalBars;
-      let hoveredIndex = Math.floor(mouseX / barWidth);
-
-      if (hoveredIndex < 0) hoveredIndex = 0;
-      if (hoveredIndex >= totalBars) hoveredIndex = totalBars - 1;
-
-      bars.forEach((bar, idx) => {
-        bar.classList.remove('hover-direct', 'hover-near', 'hover-far');
-        const diff = Math.abs(idx - hoveredIndex);
-        if (diff === 0) {
-          bar.classList.add('hover-direct');
-        } else if (diff === 1) {
-          bar.classList.add('hover-near');
-        } else if (diff === 2) {
-          bar.classList.add('hover-far');
-        }
-      });
-    });
-
-    waveformEl.addEventListener('mouseleave', () => {
-      bars.forEach(bar => bar.classList.remove('hover-direct', 'hover-near', 'hover-far'));
-    });
-  }
+ 
 
   // Real-time Running Timecode Engine
   let tcFrames = 346;

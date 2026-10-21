@@ -664,88 +664,8 @@
     revealObserver.observe(el);
   });
 
- 
-
-  // Real-time Running Timecode Engine
-  let tcFrames = 346;
-  const timecodeDisplay = document.getElementById('timecodeDisplay');
-  setInterval(() => {
-    tcFrames++;
-    const hrs = String(Math.floor(tcFrames / 86400)).padStart(2, '0');
-    const mins = String(Math.floor((tcFrames % 86400) / 1440)).padStart(2, '0');
-    const secs = String(Math.floor((tcFrames % 1440) / 24)).padStart(2, '0');
-    const f = String(tcFrames % 24).padStart(2, '0');
-    if (timecodeDisplay) timecodeDisplay.innerText = `TC ${hrs}:${mins}:${secs}:${f}`;
-  }, 1000 / 24);
-
-  // Dynamic Interactive Color Matrix Inspector
-  const inspectorViewport = document.getElementById('inspectorViewport');
-  const inspectorReticle = document.getElementById('inspectorReticle');
-  const inspectorTitle = document.getElementById('inspectorTitle');
-  const lutBadge = document.getElementById('lutBadge');
-
-  if (inspectorViewport && inspectorReticle) {
-    inspectorViewport.addEventListener('mousemove', (e) => {
-      const rect = inspectorViewport.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const normX = x / rect.width;
-      const normY = y / rect.height;
-
-      inspectorReticle.style.left = `${x}px`;
-      inspectorReticle.style.top = `${y}px`;
-
-      const hue = Math.floor(normX * 360);
-      const sat = Math.floor(normY * 100);
-      const lum = Math.floor(100 - (normY * 30));
-
-      inspectorTitle.style.color = `hsl(${hue}, ${sat}%, ${lum}%)`;
-      inspectorTitle.style.textShadow = `0 0 20px hsla(${hue}, ${sat}%, 50%, 0.5)`;
-      
-      const r = Math.floor(normX * 255);
-      const g = Math.floor(normY * 255);
-      const b = Math.floor((1 - normX) * 255);
-      lutBadge.innerText = `LUT_GRADE // RGB(${r}, ${g}, ${b})`;
-    });
-
-    inspectorViewport.addEventListener('mouseleave', () => {
-      inspectorTitle.style.color = '#FFFFFF';
-      inspectorTitle.style.textShadow = 'none';
-      lutBadge.innerText = 'PROFILE: RECT_DEFAULT';
     });
   }
-
-  // 3D Parallax Camera Rig Interactivity Engine
-  const spatialViewport = document.getElementById('spatialViewport');
-  const spatialStage = document.getElementById('spatialStage');
-  const rigStateText = document.getElementById('rigStateText');
-  const camXStat = document.getElementById('camXStat');
-  const camYStat = document.getElementById('camYStat');
-
-  if (spatialViewport && spatialStage) {
-    spatialViewport.addEventListener('mousemove', (e) => {
-      const rect = spatialViewport.getBoundingClientRect();
-      const x = e.clientX - rect.left - (rect.width / 2);
-      const y = e.clientY - rect.top - (rect.height / 2);
-
-      const rotateY = (x / (rect.width / 2)) * 30; // pitch & yaw mapping
-      const rotateX = -(y / (rect.height / 2)) * 25;
-
-      spatialStage.style.transform = `rotateX(${rotateX.toFixed(1)}deg) rotateY(${rotateY.toFixed(1)}deg)`;
-
-      if (rigStateText) rigStateText.innerText = `CAMERA_ROT: PITCH ${rotateX.toFixed(1)}° / YAW ${rotateY.toFixed(1)}°`;
-      if (camXStat) camXStat.innerText = `CAM_POS_X: ${x.toFixed(2)}px`;
-      if (camYStat) camYStat.innerText = `CAM_POS_Y: ${y.toFixed(2)}px`;
-    });
-
-    spatialViewport.addEventListener('mouseleave', () => {
-      spatialStage.style.transform = `rotateX(0deg) rotateY(0deg)`;
-      if (rigStateText) rigStateText.innerText = `CAMERA_ROT: PITCH 0.0° / YAW 0.0°`;
-      if (camXStat) camXStat.innerText = `CAM_POS_X: 0.00px`;
-      if (camYStat) camYStat.innerText = `CAM_POS_Y: 0.00px`;
-    });
-  }
-
   // Navigation Mobile Menu Toggle
   const menuToggle = document.getElementById('menuToggle');
   const navLinks = document.getElementById('navLinks');
